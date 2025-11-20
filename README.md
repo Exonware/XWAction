@@ -1,246 +1,98 @@
-# 🚀 eXonware Python Library Template
+# 🚀 **xaction: Action-Based Workflow and Automation Library**
 
 **Company:** eXonware.com  
 **Author:** Eng. Muhammad AlShehri  
 **Email:** connect@exonware.com  
-**Version:** 0.0.1  
-**Template Version:** 1.0.0  
+**Version:** 0.0.1.1
 
-## 🎯 **What This Template Is**
+## 🎯 **What is xaction?**
 
-This is a production-ready Python library template based on the successful xSystem architecture. It provides a complete, standardized foundation for creating new Python libraries in the eXonware ecosystem with all the necessary files, structure, and configurations pre-configured.
+xaction is a powerful Python library for action-based workflow orchestration and automation. It provides a comprehensive framework for building, executing, and managing complex workflows with support for input validation, error handling, and performance monitoring.
 
-## 🤖 **AI Usage Instructions - READ THIS FIRST**
+## ⚡ **Quick Start**
 
-### **For AI Assistants Using This Template**
-
-When a user asks you to create a new Python library using this template, follow these steps:
-
-#### **Step 1: Copy the Template**
-1. Copy the entire `templates/python-lib/` directory to the new library location
-2. Rename the directory to the new library name (e.g., `xdata`, `xnode`, `xaction`)
-
-#### **Step 2: Replace All Placeholders**
-Search and replace ALL occurrences of these placeholders throughout ALL files:
-
-| Placeholder | Replace With | Example |
-|-------------|-------------|---------|
-| `xaction` | The actual library name | `xdata` |
-| `Action-based workflow and automation library` | Brief description | `Advanced data manipulation library` |
-| `"action", "workflow", "automation", "execution", "tasks"` | Comma-separated keywords | `"data", "manipulation", "processing"` |
-| `February 2, 2025` | Current date | `January 31, 2025` |
-| `xaction` | The actual library name | `xdata` |
-
-#### **Step 3: File and Directory Renaming**
-1. Rename `src/exonware/xaction/` to `src/exonware/xaction/`
-2. Rename `src/xaction.py` to the actual library name
-3. Update all import paths in test files
-
-#### **Step 4: Update Package Configuration**
-1. Update `pyproject.toml` with specific dependencies for the new library
-2. Update `requirements.txt` with library-specific dependencies
-3. Verify all placeholder replacements are complete
-
-#### **Step 5: Verify Structure**
-Ensure the final structure matches this pattern:
-```
-new-library/
-├── .github/workflows/publish.yml
-├── .gitignore
-├── README.md
-├── requirements.txt
-├── pyproject.toml
-├── src/
-│   ├── exonware/
-│   │   └── xaction/
-│   │       └── __init__.py
-│   └── xaction.py
-├── tests/
-│   ├── __init__.py
-│   ├── runner.py
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── conftest.py
-│   │   ├── runner.py
-│   │   ├── test_core.py
-│   │   └── data/
-│   │       ├── expected/
-│   │       ├── fixtures/
-│   │       └── inputs/
-│   ├── unit/
-│   │   ├── __init__.py
-│   │   └── runner.py
-│   └── integration/
-│       ├── __init__.py
-│       └── runner.py
-├── docs/
-│   └── README.md
-└── examples/
-    └── basic_example.py
-```
-
-### **Critical AI Instructions**
-
-1. **NEVER skip placeholder replacement** - Every `{PLACEHOLDER}` must be replaced
-2. **ALWAYS rename directories** - Don't leave `xaction` in the structure
-3. **ALWAYS update imports** - Test files must import the correct library name
-4. **ALWAYS verify** - Check that the library can be imported after setup
-5. **Follow eXonware standards** - Use the established naming conventions and structure
-
-## 📋 **Template Contents**
-
-### **🗂️ Project Structure**
-- **Complete directory structure** matching xSystem architecture
-- **Empty source directories** ready for implementation
-- **Test framework** with core/unit/integration separation
-- **Documentation structure** with docs/ folder
-- **Examples directory** for usage demonstrations
-
-### **⚙️ Configuration Files**
-- **`pyproject.toml`** - Modern Python packaging with Hatch build system
-- **`requirements.txt`** - Comprehensive dependency management
-- **`.gitignore`** - Production-ready Git ignore rules
-- **`.github/workflows/publish.yml`** - Automated PyPI publishing
-
-### **🧪 Testing Infrastructure**
-- **pytest configuration** with proper markers and test discovery
-- **Three-tier test structure**: core, unit, integration
-- **Test runners** for each test category
-- **Sample test files** with proper imports and fixtures
-
-### **📚 Documentation Framework**
-- **Main README.md** with template structure
-- **docs/README.md** for detailed documentation
-- **Examples directory** with basic usage examples
-
-## 🛠️ **Manual Usage (For Developers)**
-
-If you're manually using this template (not via AI):
-
-### **Step 1: Copy Template**
+### **Installation**
 ```bash
-cp -r templates/python-lib/ ../your-new-library/
-cd ../your-new-library/
+pip install exonware-xaction
 ```
 
-### **Step 2: Find and Replace**
-Use your editor's find-and-replace across all files:
-- `xaction` → your library name
-- `Action-based workflow and automation library` → your library description  
-- `"action", "workflow", "automation", "execution", "tasks"` → your keywords
-- `February 2, 2025` → current date
-- `xaction` → your library name
+### **Basic Usage**
+```python
+from exonware.xaction import *
+# Or use convenience import:
+# import xaction
 
-### **Step 3: Rename Directories**
+# Your workflow orchestration code here
+```
+
+## 🎯 **Perfect For:**
+
+- **🔄 Workflow Orchestration** - Complex workflow automation and management
+- **⚡ Action Pipelines** - Building and executing action-based pipelines
+- **🔍 Input Validation** - Schema-driven input validation and processing
+- **📊 Performance Monitoring** - Workflow performance tracking and optimization
+- **🛡️ Error Handling** - Robust error handling and recovery mechanisms
+
+## 🚀 **Key Features**
+
+✅ **Workflow orchestration** framework for complex automation  
+✅ **Action pipeline system** for modular workflow composition  
+✅ **Input schema validation** with xSchema integration  
+✅ **Error handling and recovery** for robust workflows  
+✅ **Performance monitoring** and optimization tools  
+✅ **Integration with xSchema** for workflow validation  
+✅ **Comprehensive test coverage** for reliability  
+
+## 🚀 **Project Phases**
+
+xAction follows a structured 5-phase development approach designed to deliver enterprise-grade functionality while maintaining rapid iteration and continuous improvement.
+
+### **Current Phase: 🧪 Version 0 - Experimental Stage**
+- **Focus:** Fast applications & usage, refactoring to perfection of software patterns and design
+- **Status:** 🟢 **ACTIVE** - Foundation complete with workflow orchestration, action pipelines, and comprehensive testing
+
+### **Development Roadmap:**
+- **Version 1 (Q1 2026):** Production Ready - Enterprise deployment and hardening
+- **Version 2 (Q2 2026):** Mars Standard Draft Implementation - Cross-platform interoperability
+- **Version 3 (Q3 2026):** RUST Core & Facades - High-performance multi-language support
+- **Version 4 (Q4 2026):** Mars Standard Implementation - Full compliance and enterprise deployment
+
+📖 **[View Complete Project Phases Documentation](docs/PROJECT_PHASES.md)**
+
+## 📚 **Documentation**
+
+- **[API Documentation](docs/)** - Complete reference and examples
+- **[Examples](examples/)** - Practical usage examples
+- **[Tests](tests/)** - Test suites and usage patterns
+
+## 🔧 **Development**
+
 ```bash
-mv src/exonware/xaction src/exonware/your-library-name
+# Install in development mode
+pip install -e .
+
+# Run tests
+python tests/runner.py
+
+# Run specific test types
+python tests/runner.py --core
+python tests/runner.py --unit
+python tests/runner.py --integration
 ```
 
-### **Step 4: Test the Setup**
-```bash
-python -m pytest tests/ -v
-python examples/basic_example.py
-```
+## 🤝 **Contributing**
 
-## 🎯 **Template Features**
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Run the test suite
+6. Submit a pull request
 
-### **✅ Production-Ready Configuration**
-- Modern `pyproject.toml` with Hatch build system
-- Comprehensive `requirements.txt` with version constraints
-- Professional `.gitignore` covering all common patterns
-- GitHub Actions for automated PyPI publishing
+## 📄 **License**
 
-### **✅ eXonware Standards Compliance**
-- Follows established naming conventions (`exonware-{library}`)
-- Dual import support (`exonware.library` and `library`)
-- Consistent file headers with company information
-- Standard test structure (core/unit/integration)
-
-### **✅ Developer Experience**
-- Multiple test runners for different test types
-- Example files for quick start
-- Documentation templates
-- Proper Python path handling in tests
-
-### **✅ CI/CD Ready**
-- GitHub Actions workflow for PyPI publishing
-- Pytest configuration with coverage
-- Code quality tools (black, isort, mypy) configured
-- Version management through tags
-
-## 🔧 **Customization Points**
-
-When creating a new library, customize these areas:
-
-1. **Dependencies** - Add specific requirements in `pyproject.toml` and `requirements.txt`
-2. **Keywords** - Update package keywords for PyPI discoverability  
-3. **Classifiers** - Add specific PyPI classifiers for your library type
-4. **Test markers** - Add library-specific pytest markers
-5. **Examples** - Create meaningful examples for your library's use cases
-
-## 📝 **Best Practices**
-
-### **For AI Implementation**
-- Always verify placeholder replacement is complete
-- Test imports after setup to ensure everything works
-- Follow the three-tier test structure (core/unit/integration)
-- Use meaningful commit messages when creating the new library
-
-### **For Manual Implementation**  
-- Start with the basic template and gradually add features
-- Write tests as you implement functionality
-- Keep documentation updated with API changes
-- Use semantic versioning for releases
-
-## 🚀 **Getting Started After Template Setup**
-
-1. **Implement your core functionality** in `src/exonware/xaction/`
-2. **Add your dependencies** to `pyproject.toml` and `requirements.txt`
-3. **Write tests** in the appropriate test directories
-4. **Update documentation** with your API and examples
-5. **Create meaningful examples** showing library usage
-6. **Set up PyPI publishing** by adding `PYPI_API_TOKEN` to GitHub secrets
-
-## 📚 **Related Documentation**
-
-- **[eXonware Development Standards](../docs/)** - Company-wide development guidelines
-- **[xSystem Architecture](../xsystem/)** - Reference implementation this template is based on
-- **[Testing Guidelines](../docs/TESTING.md)** - How to write effective tests
-- **[Publishing Guide](../tools/ci/)** - How to publish to PyPI
-
-## 🤝 **Contributing to This Template**
-
-If you need to improve this template:
-
-1. Make changes to files in `templates/python-lib/`
-2. Update this README with any new features or changes
-3. Test the template by creating a sample library
-4. Ensure all placeholders work correctly
-5. Update the AI instructions if the process changes
-
-## 🔍 **Template Validation Checklist**
-
-Before using this template, verify:
-
-- [ ] All placeholder patterns are consistent
-- [ ] Directory structure matches eXonware standards  
-- [ ] Test framework is properly configured
-- [ ] GitHub Actions workflow is valid
-- [ ] Documentation templates are complete
-- [ ] Example files demonstrate proper usage
-- [ ] Import paths are correct in all files
+MIT License - see LICENSE file for details.
 
 ---
 
-## 🏆 **This Template Provides**
-
-✅ **Complete project structure** based on proven xSystem architecture  
-✅ **Production-ready configuration** with modern Python tooling  
-✅ **Comprehensive testing framework** with three-tier organization  
-✅ **Automated CI/CD** with GitHub Actions and PyPI publishing  
-✅ **eXonware standards compliance** for consistency across libraries  
-✅ **AI-friendly design** with clear placeholder patterns  
-✅ **Developer experience** optimized for rapid library development  
-✅ **Documentation framework** for professional library documentation  
-
-*Built with ❤️ by eXonware.com - Making Python library development effortless*
+*Built with ❤️ by eXonware.com - Making workflow automation effortless*

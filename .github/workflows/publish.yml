@@ -1,10 +1,10 @@
-name: Publish to PyPI
+name: Dual PyPI Publish - exonware-xwaction & xwaction
 
 on:
   push:
     tags:
       - 'v*'  # Triggers on version tags like v0.0.2, v1.0.0, etc.
-  workflow_dispatch:  # Allows manual trigger
+  workflow_dispatch:  # Allows manual trigger of the workflow
 
 jobs:
   publish:
@@ -23,11 +23,51 @@ jobs:
         python -m pip install --upgrade pip
         pip install build twine
     
-    - name: Build package
-      run: python -m build
+    - name: Build exonware-xwaction package
+      run: |
+        echo "Building exonware-xwaction package..."
+        python -m build
+        
+    - name: Build xwaction package
+      run: |
+        echo "Building xwaction package..."
+        cp pyproject.toml pyproject.backup.toml
+        cp pyproject.xwaction.toml pyproject.toml
+        python -m build
+        mv pyproject.backup.toml pyproject.toml
     
-    - name: Publish to PyPI
+    - name: List built packages
+      run: |
+        echo "Built packages:"
+        find dist -name "*.whl" -o -name "*.tar.gz" | sort
+    
+    - name: Publish exonware-xwaction to PyPI
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-      run: twine upload dist/*
+      run: |
+        echo "Publishing exonware-xwaction to PyPI..."
+        ls -la dist/
+        twine upload dist/exonware_xwaction-*.whl dist/exonware_xwaction-*.tar.gz
+    
+    - name: Publish xwaction to PyPI
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      run: |
+        echo "Publishing xwaction to PyPI..."
+        twine upload dist/xwaction-*.whl dist/xwaction-*.tar.gz
+        
+    - name: Success notification
+      run: |
+        echo "Successfully published both packages:"
+        echo "   exonware-xwaction v${{ github.ref_name }}"
+        echo "   xwaction v${{ github.ref_name }}"
+        echo ""
+        echo "PyPI URLs:"
+        echo "   https://pypi.org/project/exonware-xwaction/"
+        echo "   https://pypi.org/project/xwaction/"
+        echo ""
+        echo "Install with:"
+        echo "   pip install exonware-xwaction"
+        echo "   pip install xwaction"
