@@ -104,7 +104,7 @@ xAction follows a structured 5-phase development approach designed to deliver en
 
 ### **Key Deliverables:**
 - RUST core implementation
-- Python facade (exonware-xaction)
+- Python facade (exonware-xwaction)
 - TypeScript/Node.js facade
 - Go facade
 - Rust facade

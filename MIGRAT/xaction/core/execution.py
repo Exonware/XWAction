@@ -15,7 +15,7 @@ from ..engines import action_engine_registry, ActionEngineType, NativeActionEngi
 from ..handlers import action_handler_registry, ActionHandlerPhase
 from ..errors import xActionPermissionError
 from src.xlib.xdata.core.exceptions import SchemaValidationError
-from src.xlib.xsystem import get_logger
+from src.xlib.xwsystem import get_logger
 
 logger = get_logger(__name__)
 

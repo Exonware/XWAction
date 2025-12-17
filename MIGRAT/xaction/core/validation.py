@@ -9,7 +9,7 @@ from typing import Any, Dict, Optional, List, Union
 from dataclasses import dataclass
 
 from src.xlib.xdata import xSchema
-from src.xlib.xsystem import get_logger
+from src.xlib.xwsystem import get_logger
 
 logger = get_logger(__name__)
 

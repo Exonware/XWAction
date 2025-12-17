@@ -3,7 +3,7 @@
 **Company:** eXonware.com  
 **Author:** Eng. Muhammad AlShehri  
 **Email:** connect@exonware.com  
-**Version:** 0.0.1.1
+**Version:** 0.1.0.1
 
 ## 🎯 **What is xaction?**
 
@@ -13,7 +13,7 @@ xaction is a powerful Python library for action-based workflow orchestration and
 
 ### **Installation**
 ```bash
-pip install exonware-xaction
+pip install exonware-xwaction
 ```
 
 ### **Basic Usage**

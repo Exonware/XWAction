@@ -1,16 +1,12 @@
-#!/usr/bin/env python3
+#exonware/xwaction/context.py
 """
-🎯 xAction Context Module
+XWAction Context Module
 Execution context and result management.
 """
 
 from typing import Any, Dict, Optional
 from datetime import datetime
 import uuid
-
-from src.xlib.xwsystem import get_logger
-
-logger = get_logger(__name__)
 
 
 class ActionContext:
@@ -103,3 +99,4 @@ class ActionResult:
     def failure(cls, error: str, duration: float = 0.0, **metadata) -> 'ActionResult':
         """Create a failed result."""
         return cls(success=False, error=error, duration=duration, metadata=metadata)
+

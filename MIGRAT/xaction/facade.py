@@ -18,7 +18,7 @@ from .core import (
 from .model import ActionRegistry
 from .errors import xActionError, xActionValidationError, xActionExecutionError, xActionPermissionError
 from src.xlib.xdata.core.exceptions import SchemaValidationError
-from src.xlib.xsystem import get_logger
+from src.xlib.xwsystem import get_logger
 
 # Direct import for validation and documentation
 from src.xlib.xdata import xSchema

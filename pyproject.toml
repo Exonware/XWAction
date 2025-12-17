@@ -3,11 +3,11 @@ requires = [ "hatchling",]
 build-backend = "hatchling.build"
 
 [project]
-name = "exonware-xaction"
+name = "exonware-xwaction"
 dynamic = ["version"]
 description = "Action-based workflow and automation library"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 keywords = [ "action", "workflow", "automation", "execution", "tasks", "exonware",]
 classifiers = [ 
     "Development Status :: 3 - Alpha", 
@@ -15,15 +15,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License", 
     "Operating System :: OS Independent", 
     "Programming Language :: Python :: 3", 
-    "Programming Language :: Python :: 3.8", 
-    "Programming Language :: Python :: 3.9", 
-    "Programming Language :: Python :: 3.10", 
-    "Programming Language :: Python :: 3.11", 
     "Programming Language :: Python :: 3.12", 
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "exonware-xwsystem>=0.0.1",
+    "exonware-xwsystem",
 ]
 
 [[project.authors]]
@@ -42,8 +38,12 @@ dev = [
     "isort>=5.12.0", 
     "mypy>=1.0.0",
 ]
-all = [
-    # Add optional dependencies here
+lazy = [
+    "exonware-xwsystem[lazy]",
+]
+full = [
+    # xwaction leverages xwsystem's full capabilities
+    "exonware-xwsystem[full]",
 ]
 
 [project.urls]
@@ -60,7 +60,7 @@ profile = "black"
 line_length = 88
 
 [tool.mypy]
-python_version = "0.0.1.1"
+python_version = "0.1.0.1"
 strict = true
 warn_return_any = true
 warn_unused_configs = true

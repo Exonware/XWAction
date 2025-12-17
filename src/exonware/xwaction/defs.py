@@ -1,16 +1,12 @@
-#!/usr/bin/env python3
+#exonware/xwaction/defs.py
 """
-🎯 xAction Profiles Module
-Action profiles and configuration management.
+XWAction Definitions
+Enums and constants for action system.
 """
 
-from typing import Any, Dict, List, Optional, Union
 from enum import Enum
+from typing import Any, Dict, List, Optional, Union
 from dataclasses import dataclass, field
-
-from src.xlib.xwsystem import get_logger
-
-logger = get_logger(__name__)
 
 
 class ActionProfile(Enum):
@@ -21,6 +17,14 @@ class ActionProfile(Enum):
     TASK = "task"           # Background/scheduled operations
     WORKFLOW = "workflow"   # Multi-step operations with rollback
     ENDPOINT = "endpoint"   # API endpoint operations
+
+
+class ActionHandlerPhase(Enum):
+    """Execution phases for action handlers."""
+    BEFORE = "before"       # Before execution
+    AFTER = "after"         # After execution
+    ERROR = "error"         # On error
+    FINALLY = "finally"     # Finally (always executed)
 
 
 @dataclass
@@ -38,7 +42,7 @@ class ProfileConfig:
 
 
 # Built-in profile configurations
-PROFILE_CONFIGS = {
+PROFILE_CONFIGS: Dict[ActionProfile, ProfileConfig] = {
     ActionProfile.ACTION: ProfileConfig(),
     ActionProfile.QUERY: ProfileConfig(
         readonly=True,
@@ -78,48 +82,63 @@ PROFILE_CONFIGS = {
 }
 
 
+@dataclass
+class WorkflowStep:
+    """Configuration for workflow steps."""
+    name: str
+    timeout: Optional[float] = None
+    retry: int = 0
+    async_execution: bool = False
+    rollback_func: Optional[str] = None
+
+
+@dataclass
+class MonitoringConfig:
+    """Monitoring and metrics configuration."""
+    metrics: List[str] = field(default_factory=lambda: ["duration"])
+    alerts: Dict[str, str] = field(default_factory=dict)
+    threshold: Dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
+class SecurityConfig:
+    """Security configuration for actions."""
+    schemes: Union[str, List[str], Dict[str, List[str]]] = "default"
+    rate_limit: Optional[str] = None
+    audit: bool = False
+    mfa_required: bool = False
+
+
+@dataclass
+class ContractConfig:
+    """Contract validation configuration."""
+    input: Dict[str, str] = field(default_factory=dict)
+    output: Dict[str, str] = field(default_factory=dict)
+    strict: bool = True
+
+
 def get_profile_config(profile: Union[str, ActionProfile]) -> ProfileConfig:
-    """
-    Get configuration for a profile.
-    
-    Args:
-        profile: Profile name or enum value
-        
-    Returns:
-        ProfileConfig for the profile
-    """
+    """Get configuration for a profile."""
     if isinstance(profile, str):
         try:
             profile = ActionProfile(profile)
         except ValueError:
-            logger.warning(f"Unknown profile '{profile}', using 'action'")
             profile = ActionProfile.ACTION
     
     return PROFILE_CONFIGS.get(profile, ProfileConfig())
 
 
 def register_profile(name: str, config: ProfileConfig):
-    """
-    Register a custom action profile.
-    
-    Args:
-        name: Profile name
-        config: Profile configuration
-    """
+    """Register a new action profile."""
     if isinstance(name, str):
-        profile_enum = ActionProfile(name) if name in [p.value for p in ActionProfile] else None
-        if profile_enum:
+        try:
+            profile_enum = ActionProfile(name)
             PROFILE_CONFIGS[profile_enum] = config
-            logger.info(f"Registered custom profile: {name}")
-        else:
-            logger.warning(f"Cannot register profile '{name}' - not a valid ActionProfile")
+        except ValueError:
+            pass  # Invalid profile name
 
 
 def get_all_profiles() -> Dict[str, ProfileConfig]:
-    """
-    Get all available action profiles.
-    
-    Returns:
-        Dictionary mapping profile names to configurations
-    """
+    """Get all registered profiles."""
     return {profile.value: config for profile, config in PROFILE_CONFIGS.items()}
+
