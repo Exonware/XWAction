@@ -1,98 +1,61 @@
-# 🚀 **xaction: Action-Based Workflow and Automation Library**
+# xwaction
 
-**Company:** eXonware.com  
-**Author:** Eng. Muhammad AlShehri  
-**Email:** connect@exonware.com  
-**Version:** 0.1.0.1
+**Action-based workflow and automation.** Build, execute, and manage workflows with input validation, error handling, and performance monitoring. Integrates with xwschema for validation. Per project docs.
 
-## 🎯 **What is xaction?**
+**Company:** eXonware.com · **Author:** eXonware Backend Team · **Email:** connect@exonware.com  
+**Version:** See [version.py](src/exonware/xwaction/version.py) or PyPI. · **Updated:** See [version.py](src/exonware/xwaction/version.py) (`__date__`)
 
-xaction is a powerful Python library for action-based workflow orchestration and automation. It provides a comprehensive framework for building, executing, and managing complex workflows with support for input validation, error handling, and performance monitoring.
+[![Status](https://img.shields.io/badge/status-beta-blue.svg)](https://exonware.com)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-## ⚡ **Quick Start**
+---
 
-### **Installation**
+## Install
+
 ```bash
 pip install exonware-xwaction
 ```
 
-### **Basic Usage**
+---
+
+## Quick start
+
 ```python
-from exonware.xaction import *
-# Or use convenience import:
-# import xaction
+from exonware.xwaction import XWAction, ActionContext
 
-# Your workflow orchestration code here
+@XWAction(profile="query")
+def my_action(x: int) -> int:
+    return x * 2
+
+my_action(3)  # or my_action.execute(ActionContext(actor="user", source="cli"), x=3)
 ```
 
-## 🎯 **Perfect For:**
-
-- **🔄 Workflow Orchestration** - Complex workflow automation and management
-- **⚡ Action Pipelines** - Building and executing action-based pipelines
-- **🔍 Input Validation** - Schema-driven input validation and processing
-- **📊 Performance Monitoring** - Workflow performance tracking and optimization
-- **🛡️ Error Handling** - Robust error handling and recovery mechanisms
-
-## 🚀 **Key Features**
-
-✅ **Workflow orchestration** framework for complex automation  
-✅ **Action pipeline system** for modular workflow composition  
-✅ **Input schema validation** with xSchema integration  
-✅ **Error handling and recovery** for robust workflows  
-✅ **Performance monitoring** and optimization tools  
-✅ **Integration with xSchema** for workflow validation  
-✅ **Comprehensive test coverage** for reliability  
-
-## 🚀 **Project Phases**
-
-xAction follows a structured 5-phase development approach designed to deliver enterprise-grade functionality while maintaining rapid iteration and continuous improvement.
-
-### **Current Phase: 🧪 Version 0 - Experimental Stage**
-- **Focus:** Fast applications & usage, refactoring to perfection of software patterns and design
-- **Status:** 🟢 **ACTIVE** - Foundation complete with workflow orchestration, action pipelines, and comprehensive testing
-
-### **Development Roadmap:**
-- **Version 1 (Q1 2026):** Production Ready - Enterprise deployment and hardening
-- **Version 2 (Q2 2026):** Mars Standard Draft Implementation - Cross-platform interoperability
-- **Version 3 (Q3 2026):** RUST Core & Facades - High-performance multi-language support
-- **Version 4 (Q4 2026):** Mars Standard Implementation - Full compliance and enterprise deployment
-
-📖 **[View Complete Project Phases Documentation](docs/PROJECT_PHASES.md)**
-
-## 📚 **Documentation**
-
-- **[API Documentation](docs/)** - Complete reference and examples
-- **[Examples](examples/)** - Practical usage examples
-- **[Tests](tests/)** - Test suites and usage patterns
-
-## 🔧 **Development**
-
-```bash
-# Install in development mode
-pip install -e .
-
-# Run tests
-python tests/runner.py
-
-# Run specific test types
-python tests/runner.py --core
-python tests/runner.py --unit
-python tests/runner.py --integration
-```
-
-## 🤝 **Contributing**
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Run the test suite
-6. Submit a pull request
-
-## 📄 **License**
-
-MIT License - see LICENSE file for details.
+See [docs/](docs/) for pipelines, validation, and REF_* when present.
 
 ---
 
-*Built with ❤️ by eXonware.com - Making workflow automation effortless*
+## What you get
+
+| Area | What's in it |
+|------|----------------|
+| **Workflows** | Orchestration, action pipelines, error handling. |
+| **Validation** | Schema-driven input validation (xwschema integration). |
+| **Monitoring** | Performance tracking and optimization. |
+
+---
+
+## Docs and tests
+
+- **Start:** [docs/INDEX.md](docs/INDEX.md) or [docs/](docs/).
+- **Tests:** Run from project root per project layout.
+
+---
+
+## License and links
+
+MIT - see [LICENSE](LICENSE). **Homepage:** https://exonware.com · **Repository:** https://github.com/exonware/xwaction  
+
+Contributing → CONTRIBUTING.md · Security → SECURITY.md (when present).
+
+*Built with ❤️ by eXonware.com - Revolutionizing Python Development Since 2025*

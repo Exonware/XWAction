@@ -1,11 +1,11 @@
-# {xaction} Requirements
+# xwaction Requirements
 # Company: eXonware.com
-# Author: Eng. Muhammad AlShehri
+# Author: eXonware Backend Team
 # Email: connect@exonware.com
 # Version: 0.1.0.1
 # Generation Date: February 2, 2025
 #
-# This file contains all dependencies needed for {xaction}
+# This file contains all dependencies needed for xwaction
 # Compatible with Python 3.8+ for maximum compatibility
 #
 # Usage:
@@ -17,6 +17,8 @@
 # =============================================================================
 # CORE DEPENDENCIES
 # =============================================================================
+# Source size (src/*): ~353.2 KB
+pip                     # Package installer (CI and lazy install)
 
 # Add your core dependencies here
 # Example:
@@ -74,10 +76,15 @@ mypy>=0.950                          # Static type checking
 # =============================================================================
 #
 # After installing requirements, verify with:
-#   python -c "from exonware.{xaction} import *; print('✅ {xaction} loaded!')"
+#   python -c "from exonware.xwaction import *; print('✅ xwaction loaded!')"
 #
 # Or run comprehensive verification:
 #   python tests/verify_installation.py
 #
 # Expected output:
-#   🎉 SUCCESS! exonware.{xaction} is ready to use!
+#   🎉 SUCCESS! exonware.xwaction is ready to use!
+cachebox
+pylru
+hyperlight_hyperjson
+brotli
+zstandard

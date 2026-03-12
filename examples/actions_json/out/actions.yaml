@@ -1,0 +1,1190 @@
+generated_at: '2025-12-18T22:31:57.430186+00:00'
+entities:
+  User:
+    actions:
+    - bulk_create_users
+    - create_user
+    - delete_user
+    - disable_user
+    - export_users
+    - get_user
+    - import_users
+    - list_users
+    - patch_user
+    - restore_user
+    - search_users
+    - update_user
+    - upsert_user
+    - user_audit_trail
+  Order:
+    actions:
+    - batch_close_orders
+    - cancel_order
+    - create_order
+    - get_order
+    - list_orders
+    - order_history
+    - refund_order
+    - update_order
+  Product:
+    actions:
+    - bulk_update_products
+    - create_product
+    - delete_product
+    - export_products
+    - get_product
+    - list_products
+    - search_products
+    - update_product
+  Inventory:
+    actions:
+    - delete_stock
+    - get_stock
+    - reconcile_inventory
+    - release_stock
+    - reserve_stock
+    - stock_movements
+    - upsert_stock
+  Payment:
+    actions:
+    - authorize_payment
+    - capture_payment
+    - create_payment
+    - get_payment
+    - list_payments
+    - void_payment
+  AuditLog:
+    actions:
+    - export_audit_events
+    - get_audit_event
+    - list_audit_events
+  FileAsset:
+    actions:
+    - create_file_asset
+    - delete_file_asset
+    - download_file
+    - get_file_asset
+    - rotate_file_key
+    - upload_file
+entity_action_matrix:
+  User:
+    crud:
+    - create_user
+    - delete_user
+    - get_user
+    - update_user
+    advanced:
+    - bulk_create_users
+    - disable_user
+    - export_users
+    - import_users
+    - list_users
+    - patch_user
+    - restore_user
+    - search_users
+    - upsert_user
+    - user_audit_trail
+    other: []
+  Order:
+    crud:
+    - cancel_order
+    - create_order
+    - get_order
+    - update_order
+    advanced:
+    - batch_close_orders
+    - list_orders
+    - order_history
+    - refund_order
+    other: []
+  Product:
+    crud:
+    - create_product
+    - delete_product
+    - get_product
+    - update_product
+    advanced:
+    - bulk_update_products
+    - export_products
+    - list_products
+    - search_products
+    other: []
+  Inventory:
+    crud:
+    - delete_stock
+    - get_stock
+    - upsert_stock
+    advanced:
+    - reconcile_inventory
+    - release_stock
+    - reserve_stock
+    - stock_movements
+    other: []
+  Payment:
+    crud:
+    - create_payment
+    - get_payment
+    advanced:
+    - authorize_payment
+    - capture_payment
+    - list_payments
+    - void_payment
+    other: []
+  AuditLog:
+    crud: []
+    advanced:
+    - export_audit_events
+    - get_audit_event
+    - list_audit_events
+    other: []
+  FileAsset:
+    crud:
+    - create_file_asset
+    - delete_file_asset
+    - get_file_asset
+    advanced:
+    - download_file
+    - rotate_file_key
+    - upload_file
+    other: []
+actions_native_by_entity:
+  User:
+  - operationId: create_user
+    api_name: create_user
+    summary: Execute create_user
+    description: 'Action: create_user'
+    tags:
+    - user
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types:
+      user:
+        properties:
+          email:
+            type: string
+          id:
+            type: string
+        type: object
+        required:
+        - email
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters:
+      user:
+        type: dict
+        required: false
+        description: ''
+    returns: dict
+  - operationId: get_user
+    api_name: get_user
+    summary: Execute get_user
+    description: 'Action: get_user'
+    tags:
+    - user
+    - crud
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: update_user
+    api_name: update_user
+    summary: Execute update_user
+    description: 'Action: update_user'
+    tags:
+    - user
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: delete_user
+    api_name: delete_user
+    summary: Execute delete_user
+    description: 'Action: delete_user'
+    tags:
+    - user
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: list_users
+    api_name: list_users
+    summary: Execute list_users
+    description: 'Action: list_users'
+    tags:
+    - user
+    - advanced
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: list
+  - operationId: search_users
+    api_name: search_users
+    summary: Execute search_users
+    description: 'Action: search_users'
+    tags:
+    - user
+    - advanced
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: list
+  - operationId: patch_user
+    api_name: patch_user
+    summary: Execute patch_user
+    description: 'Action: patch_user'
+    tags:
+    - user
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: upsert_user
+    api_name: upsert_user
+    summary: Execute upsert_user
+    description: 'Action: upsert_user'
+    tags:
+    - user
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: export_users
+    api_name: export_users
+    summary: Execute export_users
+    description: 'Action: export_users'
+    tags:
+    - user
+    - advanced
+    profile: task
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - celery
+    parameters: {}
+    returns: dict
+  - operationId: import_users
+    api_name: import_users
+    summary: Execute import_users
+    description: 'Action: import_users'
+    tags:
+    - user
+    - advanced
+    profile: task
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - celery
+    parameters: {}
+    returns: dict
+  - operationId: disable_user
+    api_name: disable_user
+    summary: Execute disable_user
+    description: 'Action: disable_user'
+    tags:
+    - user
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: restore_user
+    api_name: restore_user
+    summary: Execute restore_user
+    description: 'Action: restore_user'
+    tags:
+    - user
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: bulk_create_users
+    api_name: bulk_create_users
+    summary: Execute bulk_create_users
+    description: 'Action: bulk_create_users'
+    tags:
+    - user
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: user_audit_trail
+    api_name: user_audit_trail
+    summary: Execute user_audit_trail
+    description: 'Action: user_audit_trail'
+    tags:
+    - user
+    - advanced
+    profile: query
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: list
+  Order:
+  - operationId: create_order
+    api_name: create_order
+    summary: Execute create_order
+    description: 'Action: create_order'
+    tags:
+    - order
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types:
+      order:
+        properties:
+          currency:
+            type: string
+          id:
+            type: string
+          total:
+            type: number
+        type: object
+        required:
+        - total
+        - currency
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters:
+      order:
+        type: dict
+        required: false
+        description: ''
+    returns: dict
+  - operationId: get_order
+    api_name: get_order
+    summary: Execute get_order
+    description: 'Action: get_order'
+    tags:
+    - order
+    - crud
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: update_order
+    api_name: update_order
+    summary: Execute update_order
+    description: 'Action: update_order'
+    tags:
+    - order
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: cancel_order
+    api_name: cancel_order
+    summary: Execute cancel_order
+    description: 'Action: cancel_order'
+    tags:
+    - order
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: list_orders
+    api_name: list_orders
+    summary: Execute list_orders
+    description: 'Action: list_orders'
+    tags:
+    - order
+    - advanced
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: list
+  - operationId: batch_close_orders
+    api_name: batch_close_orders
+    summary: Execute batch_close_orders
+    description: 'Action: batch_close_orders'
+    tags:
+    - order
+    - advanced
+    profile: workflow
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - prefect
+    parameters: {}
+    returns: dict
+  - operationId: refund_order
+    api_name: refund_order
+    summary: Execute refund_order
+    description: 'Action: refund_order'
+    tags:
+    - order
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: order_history
+    api_name: order_history
+    summary: Execute order_history
+    description: 'Action: order_history'
+    tags:
+    - order
+    - advanced
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: list
+  Product:
+  - operationId: create_product
+    api_name: create_product
+    summary: Execute create_product
+    description: 'Action: create_product'
+    tags:
+    - product
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types:
+      product:
+        properties:
+          sku:
+            type: string
+          name:
+            type: string
+          price:
+            type: number
+        type: object
+        required:
+        - sku
+        - name
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters:
+      product:
+        type: dict
+        required: false
+        description: ''
+    returns: dict
+  - operationId: get_product
+    api_name: get_product
+    summary: Execute get_product
+    description: 'Action: get_product'
+    tags:
+    - product
+    - crud
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: update_product
+    api_name: update_product
+    summary: Execute update_product
+    description: 'Action: update_product'
+    tags:
+    - product
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: delete_product
+    api_name: delete_product
+    summary: Execute delete_product
+    description: 'Action: delete_product'
+    tags:
+    - product
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: list_products
+    api_name: list_products
+    summary: Execute list_products
+    description: 'Action: list_products'
+    tags:
+    - product
+    - advanced
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: list
+  - operationId: search_products
+    api_name: search_products
+    summary: Execute search_products
+    description: 'Action: search_products'
+    tags:
+    - product
+    - advanced
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: list
+  - operationId: bulk_update_products
+    api_name: bulk_update_products
+    summary: Execute bulk_update_products
+    description: 'Action: bulk_update_products'
+    tags:
+    - product
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: export_products
+    api_name: export_products
+    summary: Execute export_products
+    description: 'Action: export_products'
+    tags:
+    - product
+    - advanced
+    profile: task
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - celery
+    parameters: {}
+    returns: dict
+  Inventory:
+  - operationId: upsert_stock
+    api_name: upsert_stock
+    summary: Execute upsert_stock
+    description: 'Action: upsert_stock'
+    tags:
+    - inventory
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: get_stock
+    api_name: get_stock
+    summary: Execute get_stock
+    description: 'Action: get_stock'
+    tags:
+    - inventory
+    - crud
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: delete_stock
+    api_name: delete_stock
+    summary: Execute delete_stock
+    description: 'Action: delete_stock'
+    tags:
+    - inventory
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: reserve_stock
+    api_name: reserve_stock
+    summary: Execute reserve_stock
+    description: 'Action: reserve_stock'
+    tags:
+    - inventory
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: release_stock
+    api_name: release_stock
+    summary: Execute release_stock
+    description: 'Action: release_stock'
+    tags:
+    - inventory
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: stock_movements
+    api_name: stock_movements
+    summary: Execute stock_movements
+    description: 'Action: stock_movements'
+    tags:
+    - inventory
+    - advanced
+    profile: query
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: list
+  - operationId: reconcile_inventory
+    api_name: reconcile_inventory
+    summary: Execute reconcile_inventory
+    description: 'Action: reconcile_inventory'
+    tags:
+    - inventory
+    - advanced
+    profile: workflow
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - prefect
+    parameters: {}
+    returns: dict
+  Payment:
+  - operationId: create_payment
+    api_name: create_payment
+    summary: Execute create_payment
+    description: 'Action: create_payment'
+    tags:
+    - payment
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: get_payment
+    api_name: get_payment
+    summary: Execute get_payment
+    description: 'Action: get_payment'
+    tags:
+    - payment
+    - crud
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: authorize_payment
+    api_name: authorize_payment
+    summary: Execute authorize_payment
+    description: 'Action: authorize_payment'
+    tags:
+    - payment
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: capture_payment
+    api_name: capture_payment
+    summary: Execute capture_payment
+    description: 'Action: capture_payment'
+    tags:
+    - payment
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: void_payment
+    api_name: void_payment
+    summary: Execute void_payment
+    description: 'Action: void_payment'
+    tags:
+    - payment
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: list_payments
+    api_name: list_payments
+    summary: Execute list_payments
+    description: 'Action: list_payments'
+    tags:
+    - payment
+    - advanced
+    profile: query
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: list
+  AuditLog:
+  - operationId: list_audit_events
+    api_name: list_audit_events
+    summary: Execute list_audit_events
+    description: 'Action: list_audit_events'
+    tags:
+    - audit
+    - advanced
+    profile: query
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: list
+  - operationId: get_audit_event
+    api_name: get_audit_event
+    summary: Execute get_audit_event
+    description: 'Action: get_audit_event'
+    tags:
+    - audit
+    - advanced
+    profile: query
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: export_audit_events
+    api_name: export_audit_events
+    summary: Execute export_audit_events
+    description: 'Action: export_audit_events'
+    tags:
+    - audit
+    - advanced
+    profile: task
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - celery
+    parameters: {}
+    returns: dict
+  FileAsset:
+  - operationId: create_file_asset
+    api_name: create_file_asset
+    summary: Execute create_file_asset
+    description: 'Action: create_file_asset'
+    tags:
+    - file
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: get_file_asset
+    api_name: get_file_asset
+    summary: Execute get_file_asset
+    description: 'Action: get_file_asset'
+    tags:
+    - file
+    - crud
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: delete_file_asset
+    api_name: delete_file_asset
+    summary: Execute delete_file_asset
+    description: 'Action: delete_file_asset'
+    tags:
+    - file
+    - crud
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: upload_file
+    api_name: upload_file
+    summary: Execute upload_file
+    description: 'Action: upload_file'
+    tags:
+    - file
+    - advanced
+    profile: task
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - celery
+    parameters: {}
+    returns: dict
+  - operationId: download_file
+    api_name: download_file
+    summary: Execute download_file
+    description: 'Action: download_file'
+    tags:
+    - file
+    - advanced
+    profile: query
+    roles:
+    - '*'
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict
+  - operationId: rotate_file_key
+    api_name: rotate_file_key
+    summary: Execute rotate_file_key
+    description: 'Action: rotate_file_key'
+    tags:
+    - file
+    - advanced
+    profile: command
+    roles:
+    - admin
+    mfa_required: false
+    handlers: []
+    in_types: {}
+    out_types: {}
+    deprecated: false
+    engines:
+    - fastapi
+    parameters: {}
+    returns: dict

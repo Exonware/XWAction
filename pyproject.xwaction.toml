@@ -1,3 +1,4 @@
+# Source size (src/*): ~353.2 KB
 [build-system]
 requires = [
     "hatchling",
@@ -20,31 +21,23 @@ keywords = [
     "tasks",
     "exonware",
 ]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-]
+classifiers = []
 dependencies = [
     "exonware-xwaction",
 ]
 authors = [
-    { name = "Eng. Muhammad AlShehri", email = "connect@exonware.com" },
+    { name = "eXonware Backend Team", email = "connect@exonware.com" },
 ]
 
 [project.license]
 text = "MIT"
 
 [project.optional-dependencies]
-dev = [
-    "exonware-xwaction[dev]",
-]
 lazy = [
     "exonware-xwaction[lazy]",
+]
+dev = [
+    "exonware-xwaction[dev]",
 ]
 full = [
     "exonware-xwaction[full]",
@@ -52,13 +45,13 @@ full = [
 
 [project.urls]
 Homepage = "https://exonware.com"
-Repository = "https://github.com/exonware/xaction"
-Documentation = "https://github.com/exonware/xaction#readme"
+Repository = "https://github.com/exonware/xwaction"
+Documentation = "https://github.com/exonware/xwaction#readme"
 
 [tool.black]
 line-length = 88
 target-version = [
-    "py312",
+    "py38",
 ]
 
 [tool.isort]
@@ -96,11 +89,7 @@ python_functions = [
     "test_*",
 ]
 addopts = "-v --tb=short"
-markers = [
-    "xaction_core: Core functionality tests",
-    "xaction_unit: Unit tests for individual components",
-    "xaction_integration: Integration tests between components",
-]
+markers = []
 
 [tool.hatch.version]
 path = "src/exonware/xwaction/version.py"

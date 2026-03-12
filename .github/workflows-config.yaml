@@ -1,0 +1,9 @@
+projects:
+  xwaction:
+    repo: xwaction
+    package_main: exonware-xwaction
+    package_wrapper: xwaction
+    python_version: "3.8"
+    has_wrapper: true
+    uses_check_versions: true
+

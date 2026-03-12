@@ -4,23 +4,23 @@ XWAction Error Classes
 Simple, focused exceptions for action execution.
 """
 
-from typing import Optional, Any, Dict
+from typing import Optional, Any
 
 
 class XWActionError(Exception):
     """Base exception for all XWAction errors."""
-    
-    def __init__(self, message: str, details: Optional[Dict[str, Any]] = None):
+
+    def __init__(self, message: str, details: Optional[dict[str, Any]] = None):
         super().__init__(message)
         self.details = details or {}
 
 
 class XWActionValidationError(XWActionError):
     """Raised when action input/output validation fails."""
-    
+
     def __init__(self, message: str, param_name: Optional[str] = None, 
                  constraint: Optional[str] = None, value: Any = None,
-                 issues: Optional[list[Dict[str, Any]]] = None):
+                 issues: Optional[list[dict[str, Any]]] = None):
         details = {
             "param": param_name,
             "constraint": constraint,
@@ -33,9 +33,9 @@ class XWActionValidationError(XWActionError):
 
 class XWActionSecurityError(XWActionError):
     """Raised when security checks fail (authentication, authorization, rate limiting)."""
-    
+
     def __init__(self, message: str, security_type: str = "general", 
-                 details: Optional[Dict[str, Any]] = None):
+                 details: Optional[dict[str, Any]] = None):
         error_details = {
             "security_type": security_type,
             **(details or {})
@@ -45,9 +45,9 @@ class XWActionSecurityError(XWActionError):
 
 class XWActionWorkflowError(XWActionError):
     """Raised when workflow execution fails."""
-    
+
     def __init__(self, message: str, workflow_step: Optional[str] = None,
-                 step_number: Optional[int] = None, details: Optional[Dict[str, Any]] = None):
+                 step_number: Optional[int] = None, details: Optional[dict[str, Any]] = None):
         error_details = {
             "workflow_step": workflow_step,
             "step_number": step_number,
@@ -58,9 +58,9 @@ class XWActionWorkflowError(XWActionError):
 
 class XWActionEngineError(XWActionError):
     """Raised when engine execution fails."""
-    
+
     def __init__(self, message: str, engine_name: Optional[str] = None,
-                 engine_type: Optional[str] = None, details: Optional[Dict[str, Any]] = None):
+                 engine_type: Optional[str] = None, details: Optional[dict[str, Any]] = None):
         error_details = {
             "engine_name": engine_name,
             "engine_type": engine_type,
@@ -71,24 +71,35 @@ class XWActionEngineError(XWActionError):
 
 class XWActionPermissionError(XWActionError):
     """Raised when user lacks permission to execute action."""
-    
-    def __init__(self, action_name: str, required_roles: list, 
-                 user_roles: Optional[list] = None):
-        message = f"Permission denied for action '{action_name}'. Required roles: {required_roles}"
+
+    def __init__(self, action_name: str, required: list, 
+                 actual: Optional[list] = None, reason: Optional[str] = None):
+        """
+        Initialize permission error.
+        Args:
+            action_name: Name of the action
+            required: Required roles/permissions
+            actual: Actual roles/permissions the user has
+            reason: Optional reason for denial
+        """
+        message = f"Permission denied for action '{action_name}'. Required roles: {required}"
+        if reason:
+            message += f". Reason: {reason}"
         details = {
             "action": action_name,
-            "required_roles": required_roles,
-            "user_roles": user_roles or []
+            "required_roles": required,
+            "user_roles": actual or []
         }
         super().__init__(message, details)
         self.api_name = action_name
-        self.required_roles = required_roles
-        self.user_roles = user_roles or []
+        self.required_roles = required
+        self.user_roles = actual or []
+        self.reason = reason
 
 
 class XWActionExecutionError(XWActionError):
     """Raised when action execution fails."""
-    
+
     def __init__(self, action_name: str, original_error: Exception):
         message = f"Action '{action_name}' failed: {str(original_error)}"
         details = {
@@ -99,4 +110,3 @@ class XWActionExecutionError(XWActionError):
         super().__init__(message, details)
         self.api_name = action_name
         self.original_error = original_error
-
