@@ -9,7 +9,7 @@ import inspect
 import functools
 import sys
 import re
-from typing import Any, Optional, Callable, Coroutine
+from typing import Any
 from .base import AActionEngineBase
 from .defs import ActionEngineType
 from ..context import ActionContext, ActionResult
@@ -19,6 +19,7 @@ from exonware.xwsystem import get_logger
 from fastapi import FastAPI, HTTPException, Body, Depends, Request, Response, BackgroundTasks, Form, Query
 from fastapi.params import Param, Depends as DependsType, Body as BodyParam
 from pydantic import Field
+from collections.abc import Callable, Coroutine
 logger = get_logger(__name__)
 
 
@@ -35,7 +36,7 @@ class FastAPIActionEngine(AActionEngineBase):
             engine_type=ActionEngineType.EXECUTION,
             priority=80  # High priority for API endpoints
         )
-        self._app: Optional[FastAPI] = None
+        self._app: FastAPI | None = None
         self._registered_routes: dict[str, dict[str, str]] = {}
 
     def can_execute(self, action_profile: ActionProfile, **kwargs) -> bool:
@@ -97,7 +98,7 @@ class FastAPIActionEngine(AActionEngineBase):
                               path_param_names: set[str],
                               method: str,
                               path: str,
-                              original_sig: Optional[inspect.Signature] = None) -> Callable:
+                              original_sig: inspect.Signature | None = None) -> Callable:
         """
         Factory to create the actual route handler function.
         Handles both sync and async actions, metrics, and error handling.
@@ -240,6 +241,9 @@ class FastAPIActionEngine(AActionEngineBase):
         """
         try:
             self._app = app
+            # Resolve XWAction wrapper: @XWAction decorator returns a wrapper with .xwaction pointing to the real action
+            if getattr(action, 'xwaction', None) is not None:
+                action = action.xwaction
             # Use provided path, or check for endpoint_path attribute, or fall back to api_name
             # The path parameter from AUTH_SERVICES should take precedence
             if path:

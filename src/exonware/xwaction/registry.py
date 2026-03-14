@@ -5,7 +5,7 @@ Enhanced Global Registry for COMBINED Action Management
 """
 
 from __future__ import annotations
-from typing import Any, Optional, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 from datetime import datetime
 from collections import defaultdict
 if TYPE_CHECKING:
@@ -133,7 +133,7 @@ class ActionRegistry:
     def export_openapi_spec(cls, 
                            title: str = "XWAction API",
                            version: str = "1.0.0",
-                           description: Optional[str] = None) -> dict[str, Any]:
+                           description: str | None = None) -> dict[str, Any]:
         """
         Export complete OpenAPI 3.1 specification for all registered actions.
         Args:
@@ -224,12 +224,12 @@ class ActionRegistry:
     @classmethod
 
     def find_actions(cls, 
-                    entity_type: Optional[str] = None,
-                    profile: Optional[str] = None,
-                    tag: Optional[str] = None,
-                    security_scheme: Optional[str] = None,
-                    readonly: Optional[bool] = None,
-                    audit_enabled: Optional[bool] = None) -> list[XWAction]:
+                    entity_type: str | None = None,
+                    profile: str | None = None,
+                    tag: str | None = None,
+                    security_scheme: str | None = None,
+                    readonly: bool | None = None,
+                    audit_enabled: bool | None = None) -> list[XWAction]:
         """
         Advanced action search with multiple filters.
         Args:

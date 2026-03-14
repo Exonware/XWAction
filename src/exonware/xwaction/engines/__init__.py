@@ -1,7 +1,7 @@
 #exonware/xwaction/engines/__init__.py
 """Engine implementations for XWAction."""
 
-from typing import Any, Optional
+from typing import Any
 from .contracts import IActionEngine
 from .defs import ActionEngineType, ActionEngineConfig
 from .base import AActionEngineBase
@@ -32,7 +32,7 @@ class ActionEngineRegistry:
             engine_type: [] for engine_type in ActionEngineType
         }
 
-    def register(self, engine: IActionEngine, config: Optional[ActionEngineConfig] = None):
+    def register(self, engine: IActionEngine, config: ActionEngineConfig | None = None):
         """Register an action engine."""
         if config is None:
             config = ActionEngineConfig(
@@ -47,7 +47,7 @@ class ActionEngineRegistry:
         self._engine_types[engine_type].append(engine)
         self._engine_types[engine_type].sort(key=lambda e: e.priority, reverse=True)
 
-    def get_engine(self, name: str) -> Optional[IActionEngine]:
+    def get_engine(self, name: str) -> IActionEngine | None:
         """Get an action engine by name."""
         return self._engines.get(name)
 
@@ -57,7 +57,7 @@ class ActionEngineRegistry:
 
     def select_engine(self, action_profile: ActionProfile,
                       engine_type: ActionEngineType = ActionEngineType.EXECUTION,
-                      **kwargs) -> Optional[IActionEngine]:
+                      **kwargs) -> IActionEngine | None:
         """
         Select the best action engine for an action profile (MIGRAT parity).
         """

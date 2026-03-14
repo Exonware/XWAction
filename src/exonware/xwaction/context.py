@@ -5,7 +5,7 @@ Execution context and result management.
 """
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Any
 from datetime import datetime
 import uuid
 
@@ -14,10 +14,10 @@ class ActionContext:
     """Execution context for actions."""
 
     def __init__(self, 
-                 actor: Optional[str] = None,
+                 actor: str | None = None,
                  source: str = "internal",
-                 trace_id: Optional[str] = None,
-                 metadata: Optional[dict[str, Any]] = None):
+                 trace_id: str | None = None,
+                 metadata: dict[str, Any] | None = None):
         self.actor = actor  # Who's executing
         self.timestamp = datetime.now()  # When
         self.source = source  # Where from (api, cli, internal)
@@ -62,9 +62,9 @@ class ActionResult:
     def __init__(self, 
                  success: bool,
                  data: Any = None,
-                 error: Optional[str] = None,
+                 error: str | None = None,
                  duration: float = 0.0,
-                 metadata: Optional[dict[str, Any]] = None):
+                 metadata: dict[str, Any] | None = None):
         self.success = success
         self.data = data
         self.error = error

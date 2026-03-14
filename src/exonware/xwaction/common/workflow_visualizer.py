@@ -5,11 +5,11 @@ Workflow Visualization Utilities
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
-Version: 0.9.0.1
+Version: 0.9.0.2
 Generation Date: 15-Nov-2025
 """
 
-from typing import Any, Optional
+from typing import Any
 from dataclasses import dataclass
 from exonware.xwsystem import get_logger
 logger = get_logger(__name__)
@@ -20,7 +20,7 @@ class WorkflowNode:
     action_name: str
     action_type: str
     status: str
-    duration: Optional[float] = None
+    duration: float | None = None
     dependencies: list[str] = None
     metadata: dict[str, Any] = None
 @dataclass
@@ -29,7 +29,7 @@ class WorkflowEdge:
     """Edge in workflow visualization."""
     source: str
     target: str
-    condition: Optional[str] = None
+    condition: str | None = None
     metadata: dict[str, Any] = None
 
 
@@ -133,7 +133,7 @@ class WorkflowVisualizer:
     def generate_json(
         nodes: list[WorkflowNode],
         edges: list[WorkflowEdge],
-        metadata: Optional[dict[str, Any]] = None
+        metadata: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """
         Generate JSON representation of workflow.

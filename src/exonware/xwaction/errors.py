@@ -4,13 +4,13 @@ XWAction Error Classes
 Simple, focused exceptions for action execution.
 """
 
-from typing import Optional, Any
+from typing import Any
 
 
 class XWActionError(Exception):
     """Base exception for all XWAction errors."""
 
-    def __init__(self, message: str, details: Optional[dict[str, Any]] = None):
+    def __init__(self, message: str, details: dict[str, Any] | None = None):
         super().__init__(message)
         self.details = details or {}
 
@@ -18,9 +18,9 @@ class XWActionError(Exception):
 class XWActionValidationError(XWActionError):
     """Raised when action input/output validation fails."""
 
-    def __init__(self, message: str, param_name: Optional[str] = None, 
-                 constraint: Optional[str] = None, value: Any = None,
-                 issues: Optional[list[dict[str, Any]]] = None):
+    def __init__(self, message: str, param_name: str | None = None, 
+                 constraint: str | None = None, value: Any = None,
+                 issues: list[dict[str, Any]] | None = None):
         details = {
             "param": param_name,
             "constraint": constraint,
@@ -35,7 +35,7 @@ class XWActionSecurityError(XWActionError):
     """Raised when security checks fail (authentication, authorization, rate limiting)."""
 
     def __init__(self, message: str, security_type: str = "general", 
-                 details: Optional[dict[str, Any]] = None):
+                 details: dict[str, Any] | None = None):
         error_details = {
             "security_type": security_type,
             **(details or {})
@@ -46,8 +46,8 @@ class XWActionSecurityError(XWActionError):
 class XWActionWorkflowError(XWActionError):
     """Raised when workflow execution fails."""
 
-    def __init__(self, message: str, workflow_step: Optional[str] = None,
-                 step_number: Optional[int] = None, details: Optional[dict[str, Any]] = None):
+    def __init__(self, message: str, workflow_step: str | None = None,
+                 step_number: int | None = None, details: dict[str, Any] | None = None):
         error_details = {
             "workflow_step": workflow_step,
             "step_number": step_number,
@@ -59,8 +59,8 @@ class XWActionWorkflowError(XWActionError):
 class XWActionEngineError(XWActionError):
     """Raised when engine execution fails."""
 
-    def __init__(self, message: str, engine_name: Optional[str] = None,
-                 engine_type: Optional[str] = None, details: Optional[dict[str, Any]] = None):
+    def __init__(self, message: str, engine_name: str | None = None,
+                 engine_type: str | None = None, details: dict[str, Any] | None = None):
         error_details = {
             "engine_name": engine_name,
             "engine_type": engine_type,
@@ -73,7 +73,7 @@ class XWActionPermissionError(XWActionError):
     """Raised when user lacks permission to execute action."""
 
     def __init__(self, action_name: str, required: list, 
-                 actual: Optional[list] = None, reason: Optional[str] = None):
+                 actual: list | None = None, reason: str | None = None):
         """
         Initialize permission error.
         Args:

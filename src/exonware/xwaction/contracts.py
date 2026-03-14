@@ -5,12 +5,13 @@ Interfaces and protocols for action system.
 """
 
 from __future__ import annotations
-from typing import Any, Optional, Callable, Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 from dataclasses import dataclass
 from .context import ActionContext, ActionResult
 from .defs import ActionProfile, ActionHandlerPhase
 from exonware.xwschema import XWSchema
 from exonware.xwsystem.shared import IObject
+from collections.abc import Callable
 
 
 @runtime_checkable
@@ -48,7 +49,7 @@ class IAction(IObject, Protocol):
     # COMBINED Properties
     @property
 
-    def operationId(self) -> Optional[str]:
+    def operationId(self) -> str | None:
         """Get the OpenAPI operation ID."""
         ...
     @property
@@ -58,12 +59,12 @@ class IAction(IObject, Protocol):
         ...
     @property
 
-    def summary(self) -> Optional[str]:
+    def summary(self) -> str | None:
         """Get the action summary."""
         ...
     @property
 
-    def description(self) -> Optional[str]:
+    def description(self) -> str | None:
         """Get the action description."""
         ...
     @property
@@ -93,12 +94,12 @@ class IAction(IObject, Protocol):
         ...
     @property
 
-    def workflow_steps(self) -> Optional[list[Any]]:
+    def workflow_steps(self) -> list[Any] | None:
         """Get workflow steps if defined."""
         ...
     @property
 
-    def monitoring_config(self) -> Optional[Any]:
+    def monitoring_config(self) -> Any | None:
         """Get monitoring configuration."""
         ...
     # Core Methods
@@ -179,10 +180,10 @@ class IAction(IObject, Protocol):
 
     def create(
         func: Callable,
-        api_name: Optional[str] = None,
-        roles: Optional[list[str]] = None,
-        in_types: Optional[dict[str, XWSchema]] = None,
-        out_types: Optional[dict[str, XWSchema]] = None,
+        api_name: str | None = None,
+        roles: list[str] | None = None,
+        in_types: dict[str, XWSchema] | None = None,
+        out_types: dict[str, XWSchema] | None = None,
     ) -> IAction:
         """
         Create an action instance from a function.
@@ -288,12 +289,12 @@ class AuthzDecision:
     Similar to OAuth 2.0 authorization decision pattern.
     """
     allowed: bool
-    reason: Optional[str] = None
-    subject: Optional[str] = None  # User/principal identifier
-    scopes: Optional[list[str]] = None
-    roles: Optional[list[str]] = None
-    permissions: Optional[list[str]] = None
-    policy_id: Optional[str] = None
+    reason: str | None = None
+    subject: str | None = None  # User/principal identifier
+    scopes: list[str] | None = None
+    roles: list[str] | None = None
+    permissions: list[str] | None = None
+    policy_id: str | None = None
 @runtime_checkable
 
 

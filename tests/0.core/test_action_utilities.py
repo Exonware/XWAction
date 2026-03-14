@@ -17,7 +17,6 @@ Generation Date: 15-Dec-2025
 from __future__ import annotations
 import pytest
 import inspect
-from typing import Optional
 from exonware.xwaction import XWAction
 from exonware.xwschema import XWSchema
 @pytest.mark.xwaction_core
@@ -389,7 +388,7 @@ class TestActionUtilitiesEdgeCases:
             def complex_action(
                 self,
                 x: int,
-                y: Optional[str] = None,
+                y: str | None = None,
                 z: dict = None
             ) -> dict:
                 return {}
@@ -572,7 +571,7 @@ class TestActionUtilitiesStress:
                 self,
                 items: list[int],
                 metadata: dict[str, str],
-                optional: Optional[int] = None
+                optional: int | None = None
             ) -> dict[str, int]:
                 return {}
         # Extract actions (triggers xwschema.extract_parameters internally)

@@ -7,11 +7,12 @@ Abstract base classes for action engine implementations.
 import sys
 import inspect
 import asyncio
-from typing import Any, Callable, Optional, get_type_hints
+from typing import Any, get_type_hints
 from .contracts import IActionEngine
 from .defs import ActionEngineType
 from ..context import ActionContext, ActionResult
 from exonware.xwsystem import get_logger
+from collections.abc import Callable
 logger = get_logger(__name__)
 from pydantic import BaseModel, create_model, Field
 
@@ -219,7 +220,7 @@ class AActionEngineBase(IActionEngine):
         return True
 
     def _create_input_model(self, api_name: str, fields: dict[str, Any], 
-                           module: Optional[str] = None) -> Optional[Any]:
+                           module: str | None = None) -> Any | None:
         """
         Generic helper to create a Pydantic model for input validation.
         Returns None if Pydantic is not installed.

@@ -4,7 +4,6 @@ Test helpers for XWAction authorization.
 Provides mock authorizers for testing.
 """
 
-from typing import Optional
 from exonware.xwaction import IActionAuthorizer, AuthzDecision, ActionContext, IAction
 
 
@@ -47,7 +46,7 @@ class MockRoleBasedAuthorizer:
     Allows testing role-based authorization without full xwauth setup.
     """
 
-    def __init__(self, default_roles: Optional[list[str]] = None):
+    def __init__(self, default_roles: list[str] | None = None):
         """
         Initialize mock role-based authorizer.
         Args:

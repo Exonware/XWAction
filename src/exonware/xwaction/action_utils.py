@@ -6,9 +6,10 @@ Fully reuses ecosystem libraries:
 - xwsystem: For logging (get_logger)
 """
 
-from typing import Any, Callable, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 import inspect
 from functools import wraps
+from collections.abc import Callable
 if TYPE_CHECKING:
     from .facade import XWAction
 from exonware.xwsystem import get_logger

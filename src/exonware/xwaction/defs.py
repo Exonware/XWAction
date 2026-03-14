@@ -6,7 +6,7 @@ Enums and constants for action system.
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 
 class ActionProfile(Enum):
@@ -67,18 +67,18 @@ class ActionParameter:
     param_type: type = str
     required: bool = True
     # Full schema override (dict = JSON Schema). When set, used as-is for in_types/XWSchema.
-    schema: Optional[dict[str, Any]] = None
+    schema: dict[str, Any] | None = None
     # Common XWSchema/JSON Schema options (used when schema is None)
-    description: Optional[str] = None
+    description: str | None = None
     default: Any = None
-    enum: Optional[list[Any]] = None
-    pattern: Optional[str] = None
-    minLength: Optional[int] = None
-    maxLength: Optional[int] = None
-    minimum: Optional[float] = None
-    maximum: Optional[float] = None
+    enum: list[Any] | None = None
+    pattern: str | None = None
+    minLength: int | None = None
+    maxLength: int | None = None
+    minimum: float | None = None
+    maximum: float | None = None
     example: Any = None
-    format: Optional[str] = None  # e.g. "date-time", "email", "uuid"
+    format: str | None = None  # e.g. "date-time", "email", "uuid"
 
     def __str__(self) -> str:
         type_str = getattr(self.param_type, "__name__", str(self.param_type))

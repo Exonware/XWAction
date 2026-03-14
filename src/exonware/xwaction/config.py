@@ -5,7 +5,7 @@ Configuration classes for action profiles, workflows, monitoring, security, and 
 """
 
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Any
 from dataclasses import dataclass, field
 from .defs import ActionProfile
 @dataclass
@@ -23,7 +23,7 @@ class XWActionConfig:
     enable_caching: bool = True
     cache_ttl: int = 300
     max_retry_attempts: int = 3
-    default_timeout: Optional[float] = None
+    default_timeout: float | None = None
 
     def copy(self) -> XWActionConfig:
         """Create a deep copy of the configuration."""
@@ -58,10 +58,10 @@ class ProfileConfig:
     cache_ttl: int = 0
     audit: bool = False
     background: bool = False
-    rate_limit: Optional[str] = None
+    rate_limit: str | None = None
     security: str | list[str] = "default"
     retry_attempts: int = 0
-    timeout: Optional[float] = None
+    timeout: float | None = None
     engine: str | list[str] = "native"
 # Built-in profile configurations
 PROFILE_CONFIGS: dict[ActionProfile, ProfileConfig] = {
@@ -108,10 +108,10 @@ PROFILE_CONFIGS: dict[ActionProfile, ProfileConfig] = {
 class WorkflowStep:
     """Configuration for workflow steps."""
     name: str
-    timeout: Optional[float] = None
+    timeout: float | None = None
     retry: int = 0
     async_execution: bool = False
-    rollback_func: Optional[str] = None
+    rollback_func: str | None = None
 @dataclass
 
 
@@ -126,7 +126,7 @@ class MonitoringConfig:
 class SecurityConfig:
     """Security configuration for actions."""
     schemes: str | list[str] | dict[str, list[str]] = "default"
-    rate_limit: Optional[str] = None
+    rate_limit: str | None = None
     audit: bool = False
     mfa_required: bool = False
 @dataclass

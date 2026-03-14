@@ -7,7 +7,7 @@ Background task execution engine for XWAction.
 import time
 import inspect
 import asyncio  # <--- Required for worker execution
-from typing import Any, Optional
+from typing import Any
 from .base import AActionEngineBase
 from .defs import ActionEngineType
 from ..context import ActionContext, ActionResult

@@ -137,10 +137,9 @@ class TestOpenAPI31Compliance:
 
     def test_openapi_optional_types(self):
         """Test that Optional types are correctly handled."""
-        from typing import Optional
         generator = OpenAPIGenerator()
         # Optional[int] should become integer (not nullable in 3.1, but type preserved)
-        optional_int_spec = generator._python_type_to_openapi(Optional[int])
+        optional_int_spec = generator._python_type_to_openapi(int | None)
         assert optional_int_spec["type"] == "integer"
 
     def test_openapi_security_schemes(self):

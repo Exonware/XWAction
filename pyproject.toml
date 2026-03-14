@@ -1,6 +1,5 @@
-# project-src-size=356878 ; 0.34 MB
 
-# Source size (src/*): ~353.2 KB
+# Source size (src/*): ~353.0 KB
 [build-system]
   requires = ["hatchling"]
   build-backend = "hatchling.build"
@@ -13,55 +12,45 @@
   requires-python = ">=3.12"
   keywords = ["action", "workflow", "automation", "execution", "tasks", "exonware"]
   classifiers = []
-  dependencies = [
-    "exonware-xwdata",  # file-size=514480 ; 0.49 MB
-    "exonware-xwschema",  # file-size=359128 ; 0.34 MB
-    # total = src + deps ; 1.17 MB
-  ]
-  authors = [
-    { name = "eXonware Backend Team", email = "connect@exonware.com" },
-  ]
+  dependencies = []
+  exonware-xwdata = "514480 ; 0.49 MB"
+  exonware-xwschema = "359128 ; 0.34 MB"
+  authors = []
+  "{ name" = "eXonware Backend Team"
 
   [project.license]
     text = "MIT"
 
   [project.optional-dependencies]
-    lazy = [
-      "exonware-xwdata[lazy]",  # file-size=9909043 ; 9.45 MB
-      "exonware-xwlazy",  # file-size=349706 ; 0.33 MB
-      "exonware-xwschema[lazy]",  # file-size=10622074 ; 10.13 MB
-      # total = src + deps ; 20.25 MB
-    ]
-    dev = [
-      "black>=23.0.0",  # file-size=3914855 ; 3.73 MB
-      "exonware-xwdata[dev]",  # file-size=197551718 ; 188.40 MB
-      "exonware-xwlazy",  # file-size=349706 ; 0.33 MB
-      "exonware-xwschema[dev]",  # file-size=235793285 ; 224.87 MB
-      "isort>=5.12.0",  # file-size=568232 ; 0.54 MB
-      "mypy>=1.0.0",  # file-size=29775254 ; 28.40 MB
-      "pytest>=7.0.0",  # file-size=3152415 ; 3.01 MB
-      "pytest-asyncio>=0.21.0",  # file-size=46752 ; 0.04 MB
-      "pytest-cov>=4.0.0",  # file-size=71639 ; 0.07 MB
-      # total = src + deps ; 449.73 MB
-    ]
-    full = [
-      "brotli",  # file-size=868889 ; 0.83 MB
-      "cachebox",  # file-size=971831 ; 0.93 MB
-      "exonware-xwdata[full]",  # file-size=628264796 ; 599.16 MB
-      "exonware-xwschema[full]",  # file-size=658086297 ; 627.60 MB
-      "hyperlight_hyperjson",  # file-size=261754 ; 0.25 MB
-      "pylru",  # file-size=74244 ; 0.07 MB
-      "zstandard",  # file-size=1384115 ; 1.32 MB
-      # total = src + deps ; 1230.50 MB
-    ]
+    lazy = []
+    "exonware-xwdata[lazy]" = "9909043 ; 9.45 MB"
+    exonware-xwlazy = "349706 ; 0.33 MB"
+    "exonware-xwschema[lazy]" = "10622074 ; 10.13 MB"
+    dev = []
+    "black>" = "23.0.0\",  # file-size=3914855 ; 3.73 MB"
+    "exonware-xwdata[dev]" = "197551718 ; 188.40 MB"
+    "exonware-xwschema[dev]" = "235793285 ; 224.87 MB"
+    "isort>" = "5.12.0\",  # file-size=568232 ; 0.54 MB"
+    "mypy>" = "1.0.0\",  # file-size=29775254 ; 28.40 MB"
+    "pytest>" = "7.0.0\",  # file-size=3152415 ; 3.01 MB"
+    "pytest-asyncio>" = "0.21.0\",  # file-size=46752 ; 0.04 MB"
+    "pytest-cov>" = "4.0.0\",  # file-size=71639 ; 0.07 MB"
+    full = ["email-validator", "ujson", "scikit-learn", "cython", "lz4", "uarray", "numexpr", "bottleneck", "gssapi", "django", "setproctitle", "trio", "socksio", "fqdn", "rfc3987", "webcolors", "uri-template", "isoduration", "isal", "python-snappy", "hyperscan", "python-socks", "unidecode"]
+    brotli = "868889 ; 0.83 MB"
+    cachebox = "971831 ; 0.93 MB"
+    "exonware-xwdata[full]" = "628264796 ; 599.16 MB"
+    "exonware-xwschema[full]" = "658086297 ; 627.60 MB"
+    hyperlight_hyperjson = "261754 ; 0.25 MB"
+    pylru = "74244 ; 0.07 MB"
+    zstandard = "1384115 ; 1.32 MB"
 
   [project.urls]
     Homepage = "https://exonware.com"
     Repository = "https://github.com/exonware/xwaction"
     Documentation = "https://github.com/exonware/xwaction#readme"
+    Subtree = "https://github.com/exonware/xwaction.git"
 
 [tool]
-  # Dependency sizes: run 'commands measure_dependency_sizes xwaction' to refresh # project-src-size and # file-size in this file.
 
   [tool.black]
     line-length = 88
@@ -72,7 +61,7 @@
     line_length = 88
 
   [tool.mypy]
-    python_version = "0.9.0.1"
+    python_version = "0.9.0.2"
     strict = true
     warn_return_any = true
     warn_unused_configs = true

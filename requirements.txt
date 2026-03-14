@@ -17,7 +17,7 @@
 # =============================================================================
 # CORE DEPENDENCIES
 # =============================================================================
-# Source size (src/*): ~353.2 KB
+# Source size (src/*): ~353.0 KB
 pip                     # Package installer (CI and lazy install)
 
 # Add your core dependencies here
@@ -88,3 +88,26 @@ pylru
 hyperlight_hyperjson
 brotli
 zstandard
+email-validator
+ujson
+scikit-learn
+cython
+lz4
+uarray
+numexpr
+bottleneck
+gssapi
+django
+setproctitle
+trio
+socksio
+fqdn
+rfc3987
+webcolors
+uri-template
+isoduration
+isal
+python-snappy
+hyperscan
+python-socks
+unidecode

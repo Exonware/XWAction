@@ -6,7 +6,7 @@ Input/output validation handler for XWAction.
 
 import time
 import hashlib
-from typing import Any, Optional
+from typing import Any
 from .base import aActionHandlerBase
 from ..defs import ActionHandlerPhase
 from ..context import ActionContext

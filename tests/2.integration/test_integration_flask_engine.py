@@ -4,12 +4,12 @@ Integration tests for FlaskActionEngine.
 
 from __future__ import annotations
 import builtins
-from typing import Callable
 import pytest
 from exonware.xwaction import XWAction, ActionProfile
 from exonware.xwaction.context import ActionContext
 from exonware.xwaction.engines.flask import FlaskActionEngine
 from exonware.xwaction.engines import action_engine_registry
+from collections.abc import Callable
 pytestmark = pytest.mark.xwaction_integration
 
 

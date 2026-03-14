@@ -5,7 +5,6 @@ We intentionally use parametrization to multiply coverage without slow runtime.
 """
 
 from __future__ import annotations
-from typing import Optional
 import pytest
 from exonware.xwaction.core.openapi import OpenAPIGenerator
 from exonware.xwaction.facade import XWAction
@@ -31,8 +30,8 @@ def test_python_type_to_openapi_basic_types(py_type, expected):
 @pytest.mark.parametrize(
     "py_type, expected",
     [
-        (Optional[int], {"type": "integer"}),
-        (Optional[str], {"type": "string"}),
+        (int | None, {"type": "integer"}),
+        (str | None, {"type": "string"}),
         (int | None, {"type": "integer"}),
         (str | None, {"type": "string"}),
     ],
@@ -67,8 +66,8 @@ def test_python_type_to_openapi_unknown_defaults_to_string(annotation):
 @pytest.mark.parametrize(
     "py_type",
     [
-        list[Optional[int]],
-        list[Optional[str]],
+        list[int | None],
+        list[str | None],
         list[int | None],
         list[str | None],
         dict[str, int],
@@ -96,7 +95,7 @@ def test_generate_spec_includes_defaults_when_action_fields_missing():
 
 
 def test_generate_spec_extracts_parameters_from_function_signature():
-    def fn(self, a: int, b: str, c: Optional[int] = None):  # noqa: ANN001
+    def fn(self, a: int, b: str, c: int | None = None):  # noqa: ANN001
         return a
     a = XWAction(api_name="f", func=fn)
     spec = OpenAPIGenerator().generate_spec(a)

@@ -6,7 +6,7 @@ OpenAPI 3.1 specification generation for actions.
 
 import inspect
 import types
-from typing import Any, Optional, Union, get_type_hints
+from typing import Any, get_type_hints
 from dataclasses import dataclass, field
 from exonware.xwsystem import get_logger
 logger = get_logger(__name__)
@@ -20,7 +20,7 @@ class OpenAPISpec:
     description: str
     tags: list[str]
     parameters: list[dict[str, Any]]
-    request_body: Optional[dict[str, Any]] = None
+    request_body: dict[str, Any] | None = None
     responses: dict[str, dict[str, Any]] = field(default_factory=dict)
     security: list[dict[str, list[str]]] = field(default_factory=list)
     deprecated: bool = False
@@ -145,7 +145,7 @@ class OpenAPIGenerator:
             logger.error(f"Failed to extract parameters: {e}")
             return parameters
 
-    def _extract_request_body(self, action: Any) -> Optional[dict[str, Any]]:
+    def _extract_request_body(self, action: Any) -> dict[str, Any] | None:
         """Extract OpenAPI request body from action."""
         try:
             # For now, we'll generate a basic request body

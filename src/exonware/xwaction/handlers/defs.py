@@ -4,7 +4,7 @@ XWAction Handler Definitions
 Type definitions, constants, and dataclasses for handlers.
 """
 
-from typing import Any, Optional
+from typing import Any
 from dataclasses import dataclass
 @dataclass
 
@@ -16,4 +16,4 @@ class ActionHandlerConfig:
     async_enabled: bool = False
     priority: int = 0
     cache_ttl: int = 0
-    config: Optional[dict[str, Any]] = None
+    config: dict[str, Any] | None = None

@@ -3,7 +3,7 @@
 
 import asyncio
 import time
-from typing import Any, Optional
+from typing import Any
 from .contracts import IActionHandler
 from .defs import ActionHandlerConfig
 from .base import aActionHandlerBase
@@ -29,7 +29,7 @@ class ActionHandlerRegistry:
         self._cache_ttl: dict[str, float] = {}
 
     def register(self, handler: IActionHandler | type[IActionHandler],
-                 config: Optional[ActionHandlerConfig] = None):
+                 config: ActionHandlerConfig | None = None):
         """Register an action handler (supports instance or class, MIGRAT parity)."""
         if isinstance(handler, type):
             handler = handler()
@@ -59,7 +59,7 @@ class ActionHandlerRegistry:
         if name in self._configs:
             self._configs[name].enabled = False
 
-    def get_handler(self, name: str) -> Optional[IActionHandler]:
+    def get_handler(self, name: str) -> IActionHandler | None:
         """Get an action handler by name."""
         return self._handlers.get(name)
 

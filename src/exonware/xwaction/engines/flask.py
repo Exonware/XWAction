@@ -7,7 +7,7 @@ Web API execution engine for XWAction using Flask.
 import time
 import inspect
 import re
-from typing import Any, Optional, Callable
+from typing import Any
 from .base import AActionEngineBase
 from .defs import ActionEngineType
 from ..context import ActionContext, ActionResult
@@ -16,6 +16,7 @@ from exonware.xwsystem import get_logger
 from flask import Flask, request, jsonify, make_response
 from flask.views import View
 from pydantic import ValidationError, Field
+from collections.abc import Callable
 logger = get_logger(__name__)
 
 
@@ -31,7 +32,7 @@ class FlaskActionEngine(AActionEngineBase):
             engine_type=ActionEngineType.EXECUTION,
             priority=70  # Slightly lower priority than FastAPI
         )
-        self._app: Optional[Flask] = None
+        self._app: Flask | None = None
         self._registered_routes: dict[str, dict[str, str]] = {}
 
     def can_execute(self, action_profile: ActionProfile, **kwargs) -> bool:
@@ -91,7 +92,7 @@ class FlaskActionEngine(AActionEngineBase):
                               path_param_names: set[str],
                               method: str,
                               path: str,
-                              RequestModel: Optional[Any] = None) -> Callable:
+                              RequestModel: Any | None = None) -> Callable:
         """
         Factory to create the actual route handler function.
         Uses a unified async handler to support Flask 2.0+ and ensure non-blocking execution.

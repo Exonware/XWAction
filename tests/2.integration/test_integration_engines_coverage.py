@@ -10,8 +10,8 @@ We keep these tests deterministic by forcing optional third-party imports
 """
 
 from __future__ import annotations
+from collections.abc import Callable
 import builtins
-from typing import Callable
 import pytest
 from exonware.xwaction import XWAction
 from exonware.xwaction.context import ActionContext

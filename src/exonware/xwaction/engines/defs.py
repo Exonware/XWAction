@@ -5,7 +5,7 @@ Type definitions, constants, and dataclasses for engines.
 """
 
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 from dataclasses import dataclass
 
 
@@ -24,4 +24,4 @@ class ActionEngineConfig:
     engine_type: ActionEngineType
     priority: int = 0  # Higher priority engines are used first
     enabled: bool = True
-    config: Optional[dict[str, Any]] = None
+    config: dict[str, Any] | None = None

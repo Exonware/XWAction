@@ -5,7 +5,7 @@ Performance monitoring and metrics handler for XWAction.
 """
 
 import time
-from typing import Any, Optional
+from typing import Any
 from .base import aActionHandlerBase
 from ..defs import ActionHandlerPhase
 from ..context import ActionContext
@@ -151,7 +151,7 @@ class MonitoringActionHandler(aActionHandlerBase):
             logger.error(f"Monitoring handler error in on_error: {e}")
             return False
 
-    def _find_execution_record(self, trace_id: str) -> Optional[dict[str, Any]]:
+    def _find_execution_record(self, trace_id: str) -> dict[str, Any] | None:
         """Find execution record by trace ID."""
         for record in self._performance_data:
             if record.get("trace_id") == trace_id:

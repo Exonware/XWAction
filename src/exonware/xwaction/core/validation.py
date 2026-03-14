@@ -11,7 +11,7 @@ This module fully reuses ecosystem libraries:
 """
 
 import re
-from typing import Any, Optional
+from typing import Any
 from dataclasses import dataclass, field
 # Fully reuse xwschema for validation
 from exonware.xwschema import XWSchema, XWSchemaValidationError
@@ -152,7 +152,7 @@ class ActionValidator:
             result.errors.append(f"Validation error: {str(e)}")
             return result
 
-    def build_validation_schema(self, action: Any) -> Optional[XWSchema]:
+    def build_validation_schema(self, action: Any) -> XWSchema | None:
         """
         Build validation schema from action configuration.
         Args:
@@ -188,7 +188,7 @@ class ActionValidator:
             logger.error(f"Failed to build validation schema: {e}")
             return None
 
-    def build_contract_schema(self, action: Any) -> Optional[XWSchema]:
+    def build_contract_schema(self, action: Any) -> XWSchema | None:
         """
         Build contract schema from action configuration.
         Args:

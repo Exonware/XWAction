@@ -9,7 +9,8 @@ This module fully reuses ecosystem libraries:
 """
 
 from __future__ import annotations
-from typing import Any, Optional, Callable, get_type_hints, List
+from collections.abc import Callable
+from typing import Any, get_type_hints
 import inspect
 import time
 from datetime import datetime
@@ -57,56 +58,56 @@ class XWAction(AAction, XWObject):
 
     def __init__(self,
                  # Core identity (OpenAPI-compliant)
-                 operationId: Optional[str] = None,
-                 api_name: Optional[str] = None,
-                 cmd_shortcut: Optional[str] = None,
-                 summary: Optional[str] = None,
-                 description: Optional[str] = None,
-                 tags: Optional[list[str]] = None,
+                 operationId: str | None = None,
+                 api_name: str | None = None,
+                 cmd_shortcut: str | None = None,
+                 summary: str | None = None,
+                 description: str | None = None,
+                 tags: list[str] | None = None,
                  # Smart inference and profiles
                  profile: str | ActionProfile | None = None,
                  smart_mode: str | bool = False,
                  # Security
                  security: str | list[str] | dict[str, list[str]] | None = None,
-                 roles: Optional[list[str]] = None,
-                 rate_limit: Optional[str] = None,
-                 audit: Optional[bool] = None,
+                 roles: list[str] | None = None,
+                 rate_limit: str | None = None,
+                 audit: bool | None = None,
                  mfa_required: bool = False,
                 # Execution control
                 engine: str | list[str] | None = None,
-                handlers: Optional[list[str]] = None,
-                readonly: Optional[bool] = None,
-                idempotent: Optional[bool] = None,
-                cache_ttl: Optional[int] = None,
-                background: Optional[bool] = None,
-                timeout: Optional[float] = None,
-                method: Optional[str] = None,  # HTTP method for web APIs (GET, POST, PUT, PATCH, DELETE)
+                handlers: list[str] | None = None,
+                readonly: bool | None = None,
+                idempotent: bool | None = None,
+                cache_ttl: int | None = None,
+                background: bool | None = None,
+                timeout: float | None = None,
+                method: str | None = None,  # HTTP method for web APIs (GET, POST, PUT, PATCH, DELETE)
                  # Retry and resilience
                  retry: int | dict[str, Any] | None = None,
-                 circuit_breaker: Optional[bool] = None,
+                 circuit_breaker: bool | None = None,
                  # Workflow and monitoring
-                 steps: Optional[list[dict[str, Any]]] = None,
+                 steps: list[dict[str, Any]] | None = None,
                  monitor: dict[str, Any] | None = None,
-                 rollback: Optional[bool] = None,
+                 rollback: bool | None = None,
                  # Streaming (for engines that support streaming responses)
                  stream: bool = False,
-                 stream_type: Optional[str] = None,
-                 stream_chunk_bytes: Optional[int] = None,
-                 stream_flush_interval: Optional[float] = None,
+                 stream_type: str | None = None,
+                 stream_chunk_bytes: int | None = None,
+                 stream_flush_interval: float | None = None,
                  # Contract validation
                  contracts: dict[str, Any] | None = None,
-                 in_types: Optional[dict[str, XWSchema]] = None,
-                 out_types: Optional[dict[str, XWSchema]] = None,
-                 parameters: Optional[List[ActionParameter]] = None,
-                 context_params: Optional[tuple[str, ...] | frozenset[str]] = None,
+                 in_types: dict[str, XWSchema] | None = None,
+                 out_types: dict[str, XWSchema] | None = None,
+                 parameters: list[ActionParameter] | None = None,
+                 context_params: tuple[str, ...] | frozenset[str] | None = None,
                  # Dependencies (FastAPI-style)
-                 dependencies: Optional[list[Callable]] = None,
+                 dependencies: list[Callable] | None = None,
                  # OpenAPI documentation
-                 responses: Optional[dict[int, dict[str, str]]] = None,
-                 examples: Optional[dict[str, Any]] = None,
+                 responses: dict[int, dict[str, str]] | None = None,
+                 examples: dict[str, Any] | None = None,
                  deprecated: bool = False,
                  # Internal
-                 func: Optional[Callable] = None):
+                 func: Callable | None = None):
         """
         Initialize XWAction decorator.
         Args:
@@ -182,7 +183,7 @@ class XWAction(AAction, XWObject):
         self._context_params: frozenset[str] | None = (
             frozenset(context_params) if context_params is not None else None
         )
-        self._action_parameters: List[ActionParameter] = []
+        self._action_parameters: list[ActionParameter] = []
         if parameters:
             self._action_parameters = list(parameters)
             if not self._in_types:
@@ -250,12 +251,12 @@ class XWAction(AAction, XWObject):
         self._out_types = out_types or {}
         self._readonly = readonly
         self._cache_ttl = cache_ttl
-        self._authorizer: Optional[IActionAuthorizer] = None  # Authorization provider
+        self._authorizer: IActionAuthorizer | None = None  # Authorization provider
         # Register with registry
         ActionRegistry.register("default", self)
     @property
 
-    def operationId(self) -> Optional[str]:
+    def operationId(self) -> str | None:
         """Get OpenAPI operation ID."""
         return self._operationId
     @property
@@ -265,17 +266,17 @@ class XWAction(AAction, XWObject):
         return self._api_name or (self._func.__name__ if self._func else "unknown")
     @property
 
-    def cmd_shortcut(self) -> Optional[str]:
+    def cmd_shortcut(self) -> str | None:
         """Get bot command shortcut name."""
         return self._cmd_shortcut
     @property
 
-    def summary(self) -> Optional[str]:
+    def summary(self) -> str | None:
         """Get action summary."""
         return self._summary
     @property
 
-    def description(self) -> Optional[str]:
+    def description(self) -> str | None:
         """Get action description."""
         return self._description
     @property
@@ -295,7 +296,7 @@ class XWAction(AAction, XWObject):
         return self._roles
     @property
 
-    def rate_limit(self) -> Optional[str]:
+    def rate_limit(self) -> str | None:
         """Get rate limit configuration."""
         return self._rate_limit
     @property
@@ -320,17 +321,17 @@ class XWAction(AAction, XWObject):
         return self._background or False
     @property
 
-    def workflow_steps(self) -> Optional[list[Any]]:
+    def workflow_steps(self) -> list[Any] | None:
         """Get workflow steps."""
         return self._steps
     @property
 
-    def monitoring_config(self) -> Optional[Any]:
+    def monitoring_config(self) -> Any | None:
         """Get monitoring configuration."""
         return self._monitor
     @property
 
-    def contract_config(self) -> Optional[Any]:
+    def contract_config(self) -> Any | None:
         """Get contract configuration."""
         return self._contracts
     @property
@@ -371,27 +372,27 @@ class XWAction(AAction, XWObject):
         return bool(getattr(self, "_stream", False))
     @property
 
-    def stream_type(self) -> Optional[str]:
+    def stream_type(self) -> str | None:
         """Get configured stream type (e.g., ndjson, sse, raw)."""
         return getattr(self, "_stream_type", None)
     @property
 
-    def stream_chunk_bytes(self) -> Optional[int]:
+    def stream_chunk_bytes(self) -> int | None:
         """Get configured preferred chunk size in bytes for streaming engines."""
         return getattr(self, "_stream_chunk_bytes", None)
     @property
 
-    def stream_flush_interval(self) -> Optional[float]:
+    def stream_flush_interval(self) -> float | None:
         """Get configured preferred flush interval in seconds for streaming engines."""
         return getattr(self, "_stream_flush_interval", None)
     @property
 
-    def in_types(self) -> Optional[dict[str, XWSchema]]:
+    def in_types(self) -> dict[str, XWSchema] | None:
         """Get input type validation."""
         return self._in_types
     @property
 
-    def out_types(self) -> Optional[dict[str, XWSchema]]:
+    def out_types(self) -> dict[str, XWSchema] | None:
         """Get output type validation."""
         return self._out_types
     @property
@@ -400,17 +401,17 @@ class XWAction(AAction, XWObject):
         return getattr(self, '_context_params', None)
     @property
 
-    def action_parameters(self) -> List[ActionParameter]:
+    def action_parameters(self) -> list[ActionParameter]:
         """Get declarative action parameters (when set via parameters=). Used by OpenAPI and xwbots."""
         return getattr(self, '_action_parameters', [])
     @property
 
-    def func(self) -> Optional[Callable]:
+    def func(self) -> Callable | None:
         """Get decorated function."""
         return self._func
     @func.setter
 
-    def func(self, value: Optional[Callable]) -> None:
+    def func(self, value: Callable | None) -> None:
         """Set decorated function (required for base class initialization)."""
         self._func = value
     @property
@@ -435,32 +436,32 @@ class XWAction(AAction, XWObject):
         return getattr(self, '_is_async_generator', False)
     @property
 
-    def function_module(self) -> Optional[str]:
+    def function_module(self) -> str | None:
         """Get the module where the function is defined."""
         return getattr(self, '_function_module', None)
     @property
 
-    def function_qualname(self) -> Optional[str]:
+    def function_qualname(self) -> str | None:
         """Get the qualified name of the function."""
         return getattr(self, '_function_qualname', None)
     @property
 
-    def source_file(self) -> Optional[str]:
+    def source_file(self) -> str | None:
         """Get the source file path where the function is defined."""
         return getattr(self, '_source_file', None)
     @property
 
-    def source_line(self) -> Optional[int]:
+    def source_line(self) -> int | None:
         """Get the line number where the function is defined."""
         return getattr(self, '_source_line', None)
     @property
 
-    def signature(self) -> Optional[inspect.Signature]:
+    def signature(self) -> inspect.Signature | None:
         """Get the cached function signature object."""
         return getattr(self, '_signature', None)
     @property
 
-    def signature_string(self) -> Optional[str]:
+    def signature_string(self) -> str | None:
         """Get the string representation of the function signature."""
         return getattr(self, '_signature_string', None)
     @property
@@ -470,7 +471,7 @@ class XWAction(AAction, XWObject):
         return getattr(self, '_parameters', {})
     @property
 
-    def return_type(self) -> Optional[type]:
+    def return_type(self) -> type | None:
         """Get the return type annotation."""
         return getattr(self, '_return_type', None)
 
@@ -549,10 +550,10 @@ class XWAction(AAction, XWObject):
         return smart_action._decorate(func)
     @classmethod
 
-    def create(cls, func: Callable, api_name: Optional[str] = None,
-               roles: Optional[list[str]] = None,
-               in_types: Optional[dict[str, XWSchema]] = None,
-               out_types: Optional[dict[str, XWSchema]] = None,
+    def create(cls, func: Callable, api_name: str | None = None,
+               roles: list[str] | None = None,
+               in_types: dict[str, XWSchema] | None = None,
+               out_types: dict[str, XWSchema] | None = None,
                **kwargs) -> IAction:
         """Create an XWAction instance from a function."""
         return cls(
@@ -820,7 +821,7 @@ class XWAction(AAction, XWObject):
             parameters[param_name] = param_info
         return parameters
 
-    def _extract_return_type(self) -> Optional[type]:
+    def _extract_return_type(self) -> type | None:
         """Extract return type annotation from function."""
         if not hasattr(self, '_type_hints') or not self._type_hints:
             return None
@@ -1128,7 +1129,7 @@ class XWAction(AAction, XWObject):
         except Exception as e:
             raise XWActionError(f"Action execution failed: {str(e)}")
 
-    def execute(self, context: Optional[ActionContext] = None, instance: Optional[Any] = None, **kwargs) -> ActionResult:
+    def execute(self, context: ActionContext | None = None, instance: Any | None = None, **kwargs) -> ActionResult:
         """
         Execute the action with full validation pipeline.
         When called without context/instance, provides sensible defaults:
@@ -1173,7 +1174,7 @@ class XWAction(AAction, XWObject):
         return result.valid
     @staticmethod
 
-    def query(query_string: str, data: Any, format: Optional[str] = None, **kwargs) -> Any:
+    def query(query_string: str, data: Any, format: str | None = None, **kwargs) -> Any:
         """
         Execute a query on data using XWQuery.
         This method allows actions to use XWQuery internally for data querying

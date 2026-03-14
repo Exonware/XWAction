@@ -6,7 +6,7 @@
 **Version:** See [version.py](src/exonware/xwaction/version.py) or PyPI. · **Updated:** See [version.py](src/exonware/xwaction/version.py) (`__date__`)
 
 [![Status](https://img.shields.io/badge/status-beta-blue.svg)](https://exonware.com)
-[![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org)
+[![Python](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---

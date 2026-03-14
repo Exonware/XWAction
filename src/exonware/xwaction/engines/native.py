@@ -5,7 +5,7 @@ In-process execution engine for actions.
 """
 
 import time
-from typing import Any, Optional
+from typing import Any
 from ..context import ActionContext, ActionResult
 from ..defs import ActionProfile
 from .base import AActionEngineBase

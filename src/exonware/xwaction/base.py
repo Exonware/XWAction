@@ -11,7 +11,7 @@ This module fully reuses ecosystem libraries:
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional, Callable
+from typing import Any
 from datetime import datetime
 from .context import ActionContext, ActionResult
 from .contracts import IAction, IActionsProvider
@@ -23,6 +23,7 @@ from exonware.xwdata import XWData
 from exonware.xwsystem.shared import XWObject
 
 
+from collections.abc import Callable
 class AAction(XWObject, ABC):
     """
     Enhanced Abstract Base Class for COMBINED Actions
@@ -34,9 +35,9 @@ class AAction(XWObject, ABC):
     def __init__(self,
                  api_name: str,
                  func: Callable,
-                 roles: Optional[list[str]] = None,
-                 in_types: Optional[dict[str, XWSchema]] = None,
-                 out_types: Optional[dict[str, XWSchema]] = None):
+                 roles: list[str] | None = None,
+                 in_types: dict[str, XWSchema] | None = None,
+                 out_types: dict[str, XWSchema] | None = None):
         super().__init__(object_id=api_name)
         now = datetime.now()
         self._created_at = now
@@ -48,17 +49,17 @@ class AAction(XWObject, ABC):
         self._in_types = in_types or {}
         self._out_types = out_types or {}
         # COMBINED properties with defaults
-        self._operationId: Optional[str] = None
+        self._operationId: str | None = None
         self._tags: list[str] = []
-        self._summary: Optional[str] = None
-        self._description: Optional[str] = None
+        self._summary: str | None = None
+        self._description: str | None = None
         self._security_config: Any = "default"
         self._readonly: bool = False
         self._audit_enabled: bool = False
         self._cache_ttl: int = 0
         self._background_execution: bool = False
-        self._workflow_steps: Optional[list[Any]] = None
-        self._monitoring_config: Optional[Any] = None
+        self._workflow_steps: list[Any] | None = None
+        self._monitoring_config: Any | None = None
         # Initialize metrics
         self._metrics = {"executions": 0, "errors": 0, "total_duration": 0.0}
         # IData engine: all IData ops delegate to _data (do not re-implement)
@@ -119,7 +120,7 @@ class AAction(XWObject, ABC):
     # COMBINED Properties
     @property
 
-    def operationId(self) -> Optional[str]:
+    def operationId(self) -> str | None:
         """Get the OpenAPI operation ID."""
         return self._operationId
     @property
@@ -129,12 +130,12 @@ class AAction(XWObject, ABC):
         return self._tags
     @property
 
-    def summary(self) -> Optional[str]:
+    def summary(self) -> str | None:
         """Get the action summary."""
         return self._summary
     @property
 
-    def description(self) -> Optional[str]:
+    def description(self) -> str | None:
         """Get the action description."""
         return self._description
     @property
@@ -164,12 +165,12 @@ class AAction(XWObject, ABC):
         return self._background_execution
     @property
 
-    def workflow_steps(self) -> Optional[list[Any]]:
+    def workflow_steps(self) -> list[Any] | None:
         """Get workflow steps if defined."""
         return self._workflow_steps
     @property
 
-    def monitoring_config(self) -> Optional[Any]:
+    def monitoring_config(self) -> Any | None:
         """Get monitoring configuration."""
         return self._monitoring_config
     # Abstract Methods (must be implemented by subclasses)
@@ -318,7 +319,7 @@ class AAction(XWObject, ABC):
         """Get metadata (delegate to _data)."""
         return self._data.get_metadata()
 
-    def get_format(self) -> Optional[str]:
+    def get_format(self) -> str | None:
         """Get format (delegate to _data)."""
         return self._data.get_format()
 
@@ -344,7 +345,7 @@ class AAction(XWObject, ABC):
         """IData.serialize (delegate to _data)."""
         return await self._data.serialize(format, **opts)
 
-    async def save(self, path: str | Any, format: Optional[str] = None, **opts) -> IAction:
+    async def save(self, path: str | Any, format: str | None = None, **opts) -> IAction:
         """IData.save (delegate to _data)."""
         await self._data.save(path, format=format, **opts)
         return self

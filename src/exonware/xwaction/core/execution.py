@@ -6,12 +6,13 @@ Core execution logic for actions with engine and handler integration.
 
 import time
 import asyncio
-from typing import Any, Optional, Callable
+from typing import Any
 from ..context import ActionContext, ActionResult
 from ..defs import ActionProfile
 from ..errors import XWActionPermissionError
 from exonware.xwschema import XWSchemaValidationError
 from exonware.xwsystem import get_logger
+from collections.abc import Callable
 logger = get_logger(__name__)
 
 

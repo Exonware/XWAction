@@ -5,7 +5,6 @@ Shared pytest fixtures for xwaction tests.
 
 from __future__ import annotations
 import pytest
-@pytest.fixture(autouse=True)
 
 
 @pytest.fixture(autouse=True)
