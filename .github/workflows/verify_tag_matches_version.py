@@ -56,11 +56,7 @@ def main() -> None:
         print(f"Not a tag build; version: {file_ver}")
         sys.exit(0)
 
-    # Python 3.8 compatibility: str.removeprefix is not available
-    if ref.startswith("refs/tags/"):
-        tag_name = ref[len("refs/tags/") :]
-    else:
-        tag_name = ref
+    tag_name = ref.removeprefix("refs/tags/")
     tag_ver = tag_name[1:] if tag_name.startswith("v") else tag_name
 
     if tag_ver != file_ver:

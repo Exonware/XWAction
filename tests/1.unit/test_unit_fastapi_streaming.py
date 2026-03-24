@@ -32,7 +32,6 @@ async def stream_numbers() -> AsyncIterator[bytes]:
     return gen()
 
 
-@pytest.mark.skip(reason="FastAPI engine does not set response_model=None for AsyncIterator streaming; add_api_route fails on AsyncIterator[bytes]")
 def test_fastapi_engine_streaming_endpoint_produces_multiple_chunks():
     app = FastAPI()
     eng = FastAPIActionEngine()
@@ -42,14 +41,13 @@ def test_fastapi_engine_streaming_endpoint_produces_multiple_chunks():
     ok = eng.register_action(stream_numbers, app, path="/stream_numbers", method="GET")
     assert ok is True
 
-    client = TestClient(app)
-    resp = client.get("/stream_numbers", stream=True)
-    assert resp.status_code == 200
-
-    # Collect streamed lines
+    # Use TestClient.stream API for compatibility with current httpx/TestClient.
     lines = []
-    for chunk in resp.iter_lines():
-        if chunk:
-            lines.append(chunk)
+    with TestClient(app) as client:
+        with client.stream("GET", "/stream_numbers") as resp:
+            assert resp.status_code == 200
+            for chunk in resp.iter_lines():
+                if chunk:
+                    lines.append(chunk)
     # We expect multiple lines from the async generator
     assert len(lines) >= 3

@@ -1,4 +1,4 @@
-# Source size (src/*): ~353.0 KB
+# Source size (src/*): ~353.1 KB
 [build-system]
 requires = [
     "hatchling",
@@ -25,10 +25,9 @@ classifiers = []
 dependencies = [
     "exonware-xwaction",
 ]
-exonware-xwdata = "514480 ; 0.49 MB"
-exonware-xwschema = "359128 ; 0.34 MB"
-authors = []
-"{ name" = "eXonware Backend Team"
+authors = [
+    { name = "eXonware Backend Team" },
+]
 
 [project.license]
 text = "MIT"
@@ -37,65 +36,11 @@ text = "MIT"
 lazy = [
     "exonware-xwaction[lazy]",
 ]
-"exonware-xwdata[lazy]" = [
-    "exonware-xwaction[exonware-xwdata[lazy]]",
-]
-exonware-xwlazy = [
-    "exonware-xwaction[exonware-xwlazy]",
-]
-"exonware-xwschema[lazy]" = [
-    "exonware-xwaction[exonware-xwschema[lazy]]",
-]
 dev = [
     "exonware-xwaction[dev]",
 ]
-"black>" = [
-    "exonware-xwaction[black>]",
-]
-"exonware-xwdata[dev]" = [
-    "exonware-xwaction[exonware-xwdata[dev]]",
-]
-"exonware-xwschema[dev]" = [
-    "exonware-xwaction[exonware-xwschema[dev]]",
-]
-"isort>" = [
-    "exonware-xwaction[isort>]",
-]
-"mypy>" = [
-    "exonware-xwaction[mypy>]",
-]
-"pytest>" = [
-    "exonware-xwaction[pytest>]",
-]
-"pytest-asyncio>" = [
-    "exonware-xwaction[pytest-asyncio>]",
-]
-"pytest-cov>" = [
-    "exonware-xwaction[pytest-cov>]",
-]
 full = [
     "exonware-xwaction[full]",
-]
-brotli = [
-    "exonware-xwaction[brotli]",
-]
-cachebox = [
-    "exonware-xwaction[cachebox]",
-]
-"exonware-xwdata[full]" = [
-    "exonware-xwaction[exonware-xwdata[full]]",
-]
-"exonware-xwschema[full]" = [
-    "exonware-xwaction[exonware-xwschema[full]]",
-]
-hyperlight_hyperjson = [
-    "exonware-xwaction[hyperlight_hyperjson]",
-]
-pylru = [
-    "exonware-xwaction[pylru]",
-]
-zstandard = [
-    "exonware-xwaction[zstandard]",
 ]
 
 [project.urls]
@@ -107,7 +52,7 @@ Subtree = "https://github.com/exonware/xwaction.git"
 [tool.black]
 line-length = 88
 target-version = [
-    "py38",
+    "py312",
 ]
 
 [tool.isort]
@@ -115,7 +60,7 @@ profile = "black"
 line_length = 88
 
 [tool.mypy]
-python_version = "0.9.0.1"
+python_version = "3.12"
 strict = true
 warn_return_any = true
 warn_unused_configs = true

@@ -23,6 +23,7 @@ Output:
 
 import sys
 import subprocess
+import os
 from pathlib import Path
 from datetime import datetime
 # ⚠️ CRITICAL: Configure UTF-8 encoding for Windows console (GUIDE_TEST.md compliance)
@@ -90,13 +91,27 @@ def run_sub_runner(runner_path: Path, description: str, output: DualOutput) -> i
     output.print(f"Starting: {description}", f"**Status:** Running...", color='info', emoji='▶️')
     output.print(f"Runner Path: {format_path(runner_path)}", f"**Runner Path:** `{format_path(runner_path)}`", color='info', emoji='📍')
     output.print(separator, "")
+    workspace_root = test_dir.parent.parent
+    sibling_src_paths = [
+        test_dir.parent / "src",
+        workspace_root / "xwdata" / "src",
+        workspace_root / "xwsystem" / "src",
+        workspace_root / "xwlazy" / "src",
+        workspace_root / "xwnode" / "src",
+    ]
+    existing_paths = [str(p) for p in sibling_src_paths if p.exists()]
+    env = os.environ.copy()
+    current_py_path = env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = os.pathsep.join(existing_paths + ([current_py_path] if current_py_path else []))
+
     result = subprocess.run(
         [sys.executable, str(runner_path)],
         cwd=runner_path.parent,
         capture_output=True,
         text=True,
         encoding='utf-8',
-        errors='replace'  # Replace invalid chars instead of crashing
+        errors='replace',  # Replace invalid chars instead of crashing
+        env=env,
     )
     # Print sub-runner output
     if result.stdout:

@@ -469,17 +469,25 @@ class FastAPIActionEngine(AActionEngineBase):
             summary = getattr(action, 'summary', None)
             description = getattr(action, 'description', None)
             tags = getattr(action, 'tags', None) or []
+            is_streaming_action = bool(getattr(action, "stream", False))
+            route_kwargs: dict[str, Any] = {
+                "operation_id": operation_id,
+                "summary": summary,
+                "description": description,
+                "tags": tags if tags else None,
+                "name": operation_id,
+            }
+            # Streaming actions typically return async iterators which are not valid
+            # Pydantic response models; disable FastAPI response model generation.
+            if is_streaming_action:
+                route_kwargs["response_model"] = None
             try:
                 # Use add_api_route to ensure the path is explicitly set
                 app.add_api_route(
                     endpoint_path,
                     route_handler,
                     methods=[method.upper()],
-                    operation_id=operation_id,
-                    summary=summary,
-                    description=description,
-                    tags=tags if tags else None,
-                    name=operation_id,
+                    **route_kwargs,
                 )
             except Exception as reg_error:
                 logger.error(f"Failed to register action '{action.api_name}' as FastAPI endpoint: {reg_error}")

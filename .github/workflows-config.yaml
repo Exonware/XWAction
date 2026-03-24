@@ -3,7 +3,7 @@ projects:
     repo: xwaction
     package_main: exonware-xwaction
     package_wrapper: xwaction
-    python_version: "3.8"
+    python_version: "3.12"
     has_wrapper: true
     uses_check_versions: true
 

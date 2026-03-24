@@ -1206,9 +1206,9 @@ class XWAction(AAction, XWObject):
             query_data = data
         # Execute query using XWQuery - fully reuses xwquery capabilities
         result = XWQuery.execute(query_string, query_data, format=format, **kwargs)
-        # Always return execute.results convention
-        data = result.data if hasattr(result, 'data') else (result.result if hasattr(result, 'result') else result)
-        return {"results": data}
+        # Return plain query payload so callers can directly assert list/dict results.
+        # Entity-specific wrappers can still normalize to {"results": ...} where needed.
+        return result.data if hasattr(result, 'data') else (result.result if hasattr(result, 'result') else result)
 
     def set_authorizer(self, authorizer: IActionAuthorizer) -> None:
         """

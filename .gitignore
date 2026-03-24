@@ -287,3 +287,5 @@ credentials.json
 # xwlazy generated files (should be in ~/.xwlazy/ but ignore in case of old behavior)
 xwlazy.lock.toml
 xwlazy_sbom.toml
+
+.examples/

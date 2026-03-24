@@ -57,7 +57,7 @@ from .handlers import (
 )
 from .action_utils import extract_actions, load_actions
 from .base import AActionsProvider
-from .contracts import IActionsProvider
+from .contracts import IActionsProvider, IAction, IActionAuthorizer, AuthzDecision
 __all__ = [
     "__version__",
     "XWAction",
@@ -106,4 +106,7 @@ __all__ = [
     "load_actions",
     "AActionsProvider",
     "IActionsProvider",
+    "IAction",
+    "IActionAuthorizer",
+    "AuthzDecision",
 ]

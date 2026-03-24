@@ -1,3 +1,5 @@
+"""Test package for exonware-xwaction."""
+
 #exonware/xwaction/tests/__init__.py
 """
 Test suite package for xwaction.

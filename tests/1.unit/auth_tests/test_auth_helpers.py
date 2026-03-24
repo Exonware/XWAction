@@ -105,3 +105,4 @@ class MockDenyAuthorizer:
             roles=context.metadata.get("roles", []),
             reason="Test mode: access denied"
         )
+
