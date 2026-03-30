@@ -2,7 +2,7 @@
 """
 #exonware/xwaction/tests/runner.py
 Main test runner for xwaction.
-Coordinates all test layers and records a single Markdown summary under docs/tests.
+Coordinates all test layers and records a single Markdown summary under docs/logs/tests.
 Company: eXonware.com
 Author: eXonware Backend Team
 Email: connect@exonware.com
@@ -18,7 +18,7 @@ Usage:
  python tests/runner.py --performance # Run only performance tests
 Output:
  - Terminal: Colored, formatted output
- - File: docs/tests/TEST_<timestamp>_SUMMARY.md (Markdown-friendly format)
+ - File: docs/logs/tests/TEST_<timestamp>_SUMMARY.md (Markdown-friendly format)
 """
 
 import sys
@@ -129,7 +129,7 @@ def run_sub_runner(runner_path: Path, description: str, output: DualOutput) -> i
 def main():
     """Main test runner function following GUIDE_TEST.md."""
     # Setup output logger
-    reports_dir = test_dir.parent / "docs" / "tests"
+    reports_dir = test_dir.parent / "docs" / "logs" / "tests"
     reports_dir.mkdir(parents=True, exist_ok=True)
     from exonware.xwsystem.utils.test_runner import timestamp_for_filename
     timestamp = timestamp_for_filename()

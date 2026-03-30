@@ -40,7 +40,7 @@ python tests/runner.py --performance
 
 ## Evidence
 
-- **Location:** `tests/`, `docs/logs/reviews/`. Optional: `docs/logs/tests/` for run summaries when kept.
+- **Location:** `tests/` (suite), `docs/logs/tests/` (`TEST_*_SUMMARY.md`, [INDEX.md](logs/tests/INDEX.md)), `docs/logs/reviews/` (review evidence).
 - **Traceability:** REF_22 FR-006 (4-layer tests); REF_01_REQ sec. 8 Maintainability (test coverage, structure)
 
 ---

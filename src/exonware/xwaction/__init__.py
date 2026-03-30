@@ -10,9 +10,18 @@ Production-grade action decorator with comprehensive features:
 - Pluggable engine system (Native, FastAPI, Celery, Prefect)
 - Cross-cutting concerns handlers (Validation, Security, Monitoring, Workflow)
 """
-# =============================================================================
-# XWLAZY INTEGRATION - Optional: install exonware-xwaction[lazy] for auto-enable
-# =============================================================================
+# XWLAZY — GUIDE_00_MASTER: register before heavy exonware imports when xwlazy is installed
+try:
+    from xwlazy.lazy import config_package_lazy_install_enabled
+
+    config_package_lazy_install_enabled(
+        __package__ or "exonware.xwaction",
+        enabled=True,
+        mode="smart",
+    )
+except ImportError:
+    pass
+
 from .version import __version__
 from .facade import XWAction
 from .errors import (

@@ -1,5 +1,6 @@
 
-# Source size (src/*): ~353.1 KB
+# project-src-size=361574 ; 0.35 MB
+# Source size (src/*): ~353.2 KB
 [build-system]
   requires = ["hatchling"]
   build-backend = "hatchling.build"
@@ -12,15 +13,35 @@
   requires-python = ">=3.12"
   keywords = ["action", "workflow", "automation", "execution", "tasks", "exonware"]
   classifiers = []
-  dependencies = []
+  dependencies = [
+    "exonware-xwdata",
+    "exonware-xwjson",
+    "exonware-xwquery",
+    "exonware-xwschema",
+    "exonware-xwsystem",
+  ]
+  # total = src + base deps; refresh via commands measure_dependency_sizes xwaction
   authors = [{ name = "eXonware Backend Team" }]
 
   [project.license]
     text = "MIT"
 
   [project.optional-dependencies]
-    lazy = []
+    lazy = [
+      "exonware-xwlazy",
+      "exonware-xwsystem[lazy]",
+      "exonware-xwdata[lazy]",
+      "exonware-xwjson[lazy]",
+      "exonware-xwquery[lazy]",
+      "exonware-xwschema[lazy]",
+    ]
     dev = [
+      "exonware-xwlazy",
+      "exonware-xwsystem[dev]",
+      "exonware-xwdata[dev]",
+      "exonware-xwjson[dev]",
+      "exonware-xwquery[dev]",
+      "exonware-xwschema[dev]",
       "black>=23.0.0",
       "isort>=5.12.0",
       "mypy>=1.0.0",
@@ -28,7 +49,16 @@
       "pytest-asyncio>=0.21.0",
       "pytest-cov>=4.0.0",
     ]
-    full = ["prefect", "unidecode"]
+    full = [
+      "exonware-xwdata[full]",
+      "exonware-xwjson[full]",
+      "exonware-xwquery[full]",
+      "exonware-xwschema[full]",
+      "exonware-xwsystem[full]",
+      "fastapi",
+      "prefect",
+      "unidecode",
+    ]
 
   [project.urls]
     Homepage = "https://exonware.com"
@@ -37,6 +67,7 @@
     Subtree = "https://github.com/exonware/xwaction.git"
 
 [tool]
+# Dependency sizes: run 'commands measure_dependency_sizes xwaction' to refresh
 
   [tool.black]
     line-length = 88

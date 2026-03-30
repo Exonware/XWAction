@@ -22,6 +22,7 @@ Navigation hub for xwaction docs. Per GUIDE_41_DOCS and GUIDE_00_MASTER.
 | [REF_21_PLAN.md](REF_21_PLAN.md) | Milestones and roadmap (from REF_01_REQ sec. 9) | GUIDE_21_PLAN |
 | [REF_22_PROJECT.md](REF_22_PROJECT.md) | Vision, requirements, milestones (from REF_01_REQ) | GUIDE_22_PROJECT |
 | [REF_35_REVIEW.md](REF_35_REVIEW.md) | Review summary and status | GUIDE_35_REVIEW |
+| [REF_50_QA.md](REF_50_QA.md) | Quality gates and release readiness | GUIDE_50_QA |
 | [REF_51_TEST.md](REF_51_TEST.md) | Test status and coverage (from REF_01_REQ sec. 8) | GUIDE_51_TEST |
 | [REF_54_BENCH.md](REF_54_BENCH.md) | Benchmark / performance (3.advance tests only; no standalone suite) | GUIDE_54_BENCH |
 
@@ -42,7 +43,12 @@ Navigation hub for xwaction docs. Per GUIDE_41_DOCS and GUIDE_00_MASTER.
 
 | Location | Content |
 |----------|---------|
+| [logs/tests/](logs/tests/) | `TEST_*_SUMMARY.md` + [INDEX.md](logs/tests/INDEX.md) (GUIDE_51_TEST) |
+| [logs/plans/](logs/plans/) | `PLAN_*` + [INDEX.md](logs/plans/INDEX.md) (GUIDE_21_PLAN) |
+| [logs/releases/](logs/releases/) | `RELEASE_*` + [INDEX.md](logs/releases/INDEX.md) (GUIDE_61_DEP) |
+| [logs/feedback/](logs/feedback/) | `FEEDBACK_*` + [INDEX.md](logs/feedback/INDEX.md) (GUIDE_62_FEED) |
 | [logs/reviews/](logs/reviews/) | REVIEW_* (GUIDE_35_REVIEW); [REVIEW_*_REQUIREMENTS.md](logs/reviews/REVIEW_20260207_164000_000_REQUIREMENTS.md) — REF_01_REQ alignment; [REVIEW_*_ARCHIVE_EXTRACTION](logs/reviews/REVIEW_20260207_ARCHIVE_EXTRACTION_REF_AND_LOGS.md) — archive value merged to REFs |
+| [tests/](tests/) | Legacy pointer only; see [tests/README.md](tests/README.md) |
 
 ## Standards
 

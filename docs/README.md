@@ -1,8 +1,5 @@
-# pytest cache directory #
+# xwaction documentation
 
-This directory contains data from the pytest's cache plugin,
-which provides the `--lf` and `--ff` options, as well as the `cache` fixture.
+Entry point: [INDEX.md](INDEX.md) for guides, `REF_*` references, and usage.
 
-**Do not** commit this to version control.
-
-See [the docs](https://docs.pytest.org/en/stable/how-to/cache.html) for more information.
+Test run summaries: [logs/tests/](logs/tests/). Note on legacy paths: [tests/README.md](tests/README.md).
