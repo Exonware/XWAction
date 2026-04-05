@@ -4,7 +4,13 @@
 
 from ..defs import ActionProfile
 from ..config import ProfileConfig, PROFILE_CONFIGS, get_profile_config, register_profile, get_all_profiles
-from .validation import ActionValidator, ValidationResult, action_validator, DEFAULT_CONTEXT_PARAMS
+from .validation import (
+    ActionValidator,
+    ValidationResult,
+    action_validator,
+    coerce_explicit_none_to_defaults,
+    DEFAULT_CONTEXT_PARAMS,
+)
 from .execution import ActionExecutor, action_executor
 from .openapi import OpenAPIGenerator, openapi_generator
 __all__ = [
@@ -17,6 +23,7 @@ __all__ = [
     "ActionValidator",
     "ValidationResult",
     "action_validator",
+    "coerce_explicit_none_to_defaults",
     "DEFAULT_CONTEXT_PARAMS",
     "ActionExecutor",
     "action_executor",

@@ -24,6 +24,7 @@ from .context import ActionContext, ActionResult  # Context from context.py
 from .core import (
     action_executor, action_validator, openapi_generator
 )
+from .core.validation import coerce_explicit_none_to_defaults
 from .registry import ActionRegistry
 from .errors import (
     XWActionError, XWActionValidationError, XWActionExecutionError, 
@@ -656,6 +657,7 @@ class XWAction(AAction, XWObject):
                     logger.debug(f"Could not convert args to kwargs for validation: {e}")
                     # If conversion fails, use original kwargs for validation
                     validation_kwargs = kwargs
+            coerce_explicit_none_to_defaults(self, validation_kwargs)
             # Permissions
             # #region agent log
             try:
@@ -698,6 +700,7 @@ class XWAction(AAction, XWObject):
                 sig = inspect.signature(func)
                 if 'context' not in sig.parameters:
                     kwargs_for_call.pop('context', None)
+            coerce_explicit_none_to_defaults(self, kwargs_for_call)
             return self._execute_wrapper(func, *args, **kwargs_for_call)
         def execute_wrapper(context: ActionContext, instance: Any, **kwargs) -> ActionResult:
             """Execute the action with context."""

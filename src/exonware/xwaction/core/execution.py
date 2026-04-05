@@ -48,8 +48,9 @@ class ActionExecutor:
         try:
             # Built-in input validation (always on)
             try:
-                from .validation import action_validator as _validator
-                validation_result = _validator.validate_inputs(action, kwargs)
+                from .validation import action_validator, coerce_explicit_none_to_defaults
+                coerce_explicit_none_to_defaults(action, kwargs)
+                validation_result = action_validator.validate_inputs(action, kwargs)
                 if not validation_result.valid:
                     raise XWSchemaValidationError(
                         "Action validation failed",

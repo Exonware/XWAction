@@ -24,6 +24,47 @@ logger = get_logger(__name__)
 DEFAULT_CONTEXT_PARAMS = frozenset({"session", "message", "context"})
 
 
+def coerce_explicit_none_to_defaults(action: Any, kwargs: dict[str, Any]) -> None:
+    """
+    OpenAPI/JSON clients and some bridges pass JSON null for omitted optional fields.
+    Those values arrive as Python None with the key still present, so inspect.bind()
+    merge logic does not replace them with signature defaults. Normalize before schema
+    validation and before calling the underlying function.
+    """
+    params = getattr(action, "_parameters", None) or {}
+    changed: list[str] = []
+    for pname, pinfo in params.items():
+        if pname == "self":
+            continue
+        if getattr(pinfo, "has_default", False) and kwargs.get(pname) is None:
+            kwargs[pname] = pinfo.default
+            changed.append(pname)
+    if not changed:
+        return
+    # #region agent log
+    try:
+        import json
+        import time
+        from pathlib import Path
+
+        payload = {
+            "sessionId": "817459",
+            "hypothesisId": "H-null-default",
+            "location": "xwaction/core/validation.coerce_explicit_none_to_defaults",
+            "message": "coerced None to signature default",
+            "data": {
+                "action": getattr(action, "api_name", None),
+                "params": changed,
+            },
+            "timestamp": int(time.time() * 1000),
+        }
+        with Path("debug-817459.log").open("a", encoding="utf-8") as _df:
+            _df.write(json.dumps(payload) + "\n")
+    except Exception:
+        pass
+    # #endregion
+
+
 def _get_context_params(action: Any) -> frozenset[str]:
     """Resolve context params for action (per-action override or default)."""
     val = getattr(action, "context_params", None) or getattr(action, "_context_params", None)

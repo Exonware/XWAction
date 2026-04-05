@@ -208,6 +208,25 @@ result = find_high_value_users.execute(ctx, data={"users": [...]})
 
 ---
 
+## Ecosystem functional contributions
+
+`xwaction` is the orchestration layer; sibling XW libraries provide the typed contracts it executes against.
+You can use `xwaction` standalone for decorator-based execution and engine adapters.
+Additional XW integrations are optional and are primarily useful when building enterprise and mission-critical automation infrastructure under your own operational control.
+
+| Supporting XW lib | What it provides to xwaction | Functional requirement it satisfies |
+|------|----------------|----------------|
+| **XWSchema** | Schema-backed input/output validation for actions and OpenAPI metadata generation. | Contract-safe action invocation and predictable payload validation. |
+| **XWQuery** | Query execution surface callable from action context (`XWAction.query`). | In-action data retrieval/transform workflows without custom query adapters. |
+| **XWSystem** | Shared runtime primitives (logging, errors, async/utilities, base object/contracts). | Engine-neutral action behavior and consistent operational semantics. |
+| **XWAuth** | Authorization/token context integration for protected actions. | Enforceable security boundaries for command/endpoint automation paths. |
+| **XWEntity** | Entity-bound action workflows over domain objects. | Domain-centric automation instead of function-only orchestration. |
+| **XWAPI** | Endpoint hosting pattern and middleware ecosystem for action-exposed APIs. | Production API deployment for actions with standardized middleware/error handling. |
+
+Competitive edge: action definitions stay portable across native calls, APIs, workers, and workflow engines because validation, query, and security contracts are provided by shared XW layers.
+
+---
+
 ## Docs and tests
 
 - **Start:** [docs/INDEX.md](docs/INDEX.md) or [docs/](docs/).
@@ -226,6 +245,6 @@ MIT - see [LICENSE](LICENSE). **Homepage:** https://exonware.com · **Repository
 - Source validation: 15 async def definitions and 26 await usages under src/.
 - Use async APIs for I/O-heavy or concurrent workloads to improve throughput and responsiveness.
 <!-- async-support:end -->
-Version: 0.9.0.6 | Updated: 31-Mar-2026
+Version: 0.9.0.7 | Updated: 05-Apr-2026
 
 *Built with ❤️ by eXonware.com - Revolutionizing Python Development Since 2025*

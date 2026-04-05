@@ -289,3 +289,10 @@ xwlazy.lock.toml
 xwlazy_sbom.toml
 
 .examples/
+
+# Local private folders
+.secrets
+.references
+.venv
+.archive
+
