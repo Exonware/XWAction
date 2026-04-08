@@ -6,11 +6,11 @@
 
 [![Status](https://img.shields.io/badge/status-beta-blue.svg)](https://exonware.com)
 [![Python](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 ---
 
-## Install
+## 📦 Install
 
 ```bash
 pip install exonware-xwaction
@@ -20,7 +20,7 @@ pip install exonware-xwaction[full]
 
 ---
 
-## Quick start
+## 🚀 Quick start
 
 ```python
 from exonware.xwaction import XWAction, ActionContext
@@ -36,7 +36,7 @@ See [docs/](docs/) for pipelines, validation, and any `REF_*` files.
 
 ---
 
-## Engine and handler coverage
+## 🧩 Engine and handler coverage
 
 `xwaction` is not only a server decorator. The codebase includes:
 
@@ -50,7 +50,7 @@ See [docs/](docs/) for pipelines, validation, and any `REF_*` files.
 
 ---
 
-## Automation + event-driven positioning
+## 🤖 Automation + event-driven positioning
 
 - `xwaction` is the base layer for action automation across the eXonware stack.
 - You can wire the same action into event sources (API requests, bot commands, internal triggers) without rewriting business logic.
@@ -58,7 +58,7 @@ See [docs/](docs/) for pipelines, validation, and any `REF_*` files.
 - Query-in-action support (`XWAction.query`) makes it a strong orchestration layer for LLM/agent/server scenarios where tool calls need controlled execution context.
 - Validation + security + authorization hooks provide safer boundaries for agentic/server-side automation.
 
-## What you get
+## ✨ What you get
 
 | Area | What's in it |
 |------|----------------|
@@ -73,7 +73,7 @@ See [docs/](docs/) for pipelines, validation, and any `REF_*` files.
 
 ---
 
-## Better developer examples
+## 📘 Better developer examples
 
 ### 1) Action with schema validation + OpenAPI metadata
 
@@ -208,7 +208,7 @@ result = find_high_value_users.execute(ctx, data={"users": [...]})
 
 ---
 
-## Ecosystem functional contributions
+## 🌐 Ecosystem functional contributions
 
 `xwaction` is the orchestration layer; sibling XW libraries provide the typed contracts it executes against.
 You can use `xwaction` standalone for decorator-based execution and engine adapters.
@@ -227,24 +227,24 @@ Competitive edge: action definitions stay portable across native calls, APIs, wo
 
 ---
 
-## Docs and tests
+## 📖 Docs and tests
 
 - **Start:** [docs/INDEX.md](docs/INDEX.md) or [docs/](docs/).
 - **Tests:** From repo root, follow the project's test layout.
 
 ---
 
-## License and links
+## 📜 License and links
 
-MIT - see [LICENSE](LICENSE). **Homepage:** https://exonware.com · **Repository:** https://github.com/exonware/xwaction  
+Apache-2.0 - see [LICENSE](LICENSE). **Homepage:** https://exonware.com · **Repository:** https://github.com/exonware/xwaction  
 
-## Async Support
+## ⏱️ Async Support
 
 <!-- async-support:start -->
 - xwaction includes asynchronous execution paths in production code.
 - Source validation: 15 async def definitions and 26 await usages under src/.
 - Use async APIs for I/O-heavy or concurrent workloads to improve throughput and responsiveness.
 <!-- async-support:end -->
-Version: 0.9.0.7 | Updated: 05-Apr-2026
+Version: 0.9.0.8 | Updated: 08-Apr-2026
 
 *Built with ❤️ by eXonware.com - Revolutionizing Python Development Since 2025*

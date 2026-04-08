@@ -24,40 +24,44 @@
   authors = [{ name = "eXonware Backend Team" }]
 
   [project.license]
-    text = "MIT"
+    text = "Apache-2.0"
 
   [project.optional-dependencies]
+    # First-party XW libs composed by this package (excludes exonware-xwsystem; see lazy/full).
+    xw = [
+      "exonware-xwdata",
+      "exonware-xwjson",
+      "exonware-xwquery",
+      "exonware-xwschema",
+    ]
     lazy = [
+      "exonware-xwaction[xw]",
       "exonware-xwlazy",
       "exonware-xwsystem[lazy]",
-      "exonware-xwdata[lazy]",
-      "exonware-xwjson[lazy]",
-      "exonware-xwquery[lazy]",
-      "exonware-xwschema[lazy]",
+      "exonware-xwdata[xw]",
+      "exonware-xwjson[xw]",
+      "exonware-xwquery[xw]",
+      "exonware-xwschema[xw]",
+    ]
+    full = [
+      "exonware-xwaction[xw]",
+      "exonware-xwsystem[full]",
+      "exonware-xwdata[xw]",
+      "exonware-xwjson[xw]",
+      "exonware-xwquery[xw]",
+      "exonware-xwschema[xw]",
+      "fastapi",
+      "prefect",
+      "unidecode",
     ]
     dev = [
-      "exonware-xwlazy",
-      "exonware-xwsystem[dev]",
-      "exonware-xwdata[dev]",
-      "exonware-xwjson[dev]",
-      "exonware-xwquery[dev]",
-      "exonware-xwschema[dev]",
+      "exonware-xwaction[full]",
       "black>=23.0.0",
       "isort>=5.12.0",
       "mypy>=1.0.0",
       "pytest>=7.0.0",
       "pytest-asyncio>=0.21.0",
       "pytest-cov>=4.0.0",
-    ]
-    full = [
-      "exonware-xwdata[full]",
-      "exonware-xwjson[full]",
-      "exonware-xwquery[full]",
-      "exonware-xwschema[full]",
-      "exonware-xwsystem[full]",
-      "fastapi",
-      "prefect",
-      "unidecode",
     ]
 
   [project.urls]

@@ -30,17 +30,21 @@ authors = [
 ]
 
 [project.license]
-text = "MIT"
+text = "Apache-2.0"
 
 [project.optional-dependencies]
+    # First-party XW libs composed by this package (excludes exonware-xwsystem; see lazy/full).
+xw = [
+    "exonware-xwaction[xw]",
+]
 lazy = [
     "exonware-xwaction[lazy]",
 ]
-dev = [
-    "exonware-xwaction[dev]",
-]
 full = [
     "exonware-xwaction[full]",
+]
+dev = [
+    "exonware-xwaction[dev]",
 ]
 
 [project.urls]
