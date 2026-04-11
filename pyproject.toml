@@ -7,18 +7,18 @@
 
 [project]
   name = "exonware-xwaction"
-  dynamic = ["version"]
+dynamic = ["version"]
   description = "Action-based workflow and automation library"
   readme = "README.md"
   requires-python = ">=3.12"
   keywords = ["action", "workflow", "automation", "execution", "tasks", "exonware"]
   classifiers = []
   dependencies = [
-    "exonware-xwdata",
-    "exonware-xwjson",
-    "exonware-xwquery",
-    "exonware-xwschema",
-    "exonware-xwsystem",
+    "exonware-xwdata==0.9.0.16",
+    "exonware-xwjson==0.9.0.22",
+    "exonware-xwquery==0.9.0.14",
+    "exonware-xwschema==0.4.0.10",
+    "exonware-xwsystem==0.9.0.38",
   ]
   # total = src + base deps; refresh via commands measure_dependency_sizes xwaction
   authors = [{ name = "eXonware Backend Team" }]
@@ -27,35 +27,35 @@
     text = "Apache-2.0"
 
   [project.optional-dependencies]
-    # First-party XW libs composed by this package (excludes exonware-xwsystem; see lazy/full).
+    # First-party XW libs composed by this package (excludes exonware-xwsystem==0.9.0.37; see lazy/full).
     xw = [
-      "exonware-xwdata",
-      "exonware-xwjson",
-      "exonware-xwquery",
-      "exonware-xwschema",
+      "exonware-xwdata==0.9.0.16",
+      "exonware-xwjson==0.9.0.22",
+      "exonware-xwquery==0.9.0.14",
+      "exonware-xwschema==0.4.0.10",
     ]
     lazy = [
-      "exonware-xwaction[xw]",
-      "exonware-xwlazy",
-      "exonware-xwsystem[lazy]",
-      "exonware-xwdata[xw]",
-      "exonware-xwjson[xw]",
-      "exonware-xwquery[xw]",
-      "exonware-xwschema[xw]",
+      "exonware-xwaction[xw]==0.9.0.10",
+      "exonware-xwlazy==1.0.1.80",
+      "exonware-xwsystem[lazy]==0.9.0.38",
+      "exonware-xwdata[xw]==0.9.0.16",
+      "exonware-xwjson[xw]==0.9.0.22",
+      "exonware-xwquery[xw]==0.9.0.14",
+      "exonware-xwschema[xw]==0.4.0.10",
     ]
     full = [
-      "exonware-xwaction[xw]",
-      "exonware-xwsystem[full]",
-      "exonware-xwdata[xw]",
-      "exonware-xwjson[xw]",
-      "exonware-xwquery[xw]",
-      "exonware-xwschema[xw]",
+      "exonware-xwaction[xw]==0.9.0.10",
+      "exonware-xwsystem[full]==0.9.0.38",
+      "exonware-xwdata[xw]==0.9.0.16",
+      "exonware-xwjson[xw]==0.9.0.22",
+      "exonware-xwquery[xw]==0.9.0.14",
+      "exonware-xwschema[xw]==0.4.0.10",
       "fastapi",
       "prefect",
       "unidecode",
     ]
     dev = [
-      "exonware-xwaction[full]",
+      "exonware-xwaction[full]==0.9.0.10",
       "black>=23.0.0",
       "isort>=5.12.0",
       "mypy>=1.0.0",
