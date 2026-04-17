@@ -10,7 +10,13 @@ This module fully reuses ecosystem libraries:
 
 from __future__ import annotations
 from collections.abc import Callable
-from typing import Any, get_type_hints
+_UT_MISSING = object()
+try:
+    from types import UnionType as _UnionType
+except ImportError:  # Python < 3.10
+    _UnionType = _UT_MISSING  # type: ignore[misc, assignment]
+
+from typing import Any, Union, get_args, get_origin, get_type_hints
 import inspect
 import time
 from datetime import datetime
@@ -140,7 +146,7 @@ class XWAction(AAction, XWObject):
             contracts: Contract validation
             in_types: Input type validation (or derived from parameters when parameters is given and in_types is empty)
             out_types: Output type validation
-            parameters: Optional list of ActionParameter (name, param_type, required). When provided and in_types is empty, in_types is built from it. Reused by xwbots and OpenAPI.
+            parameters: Optional list of ActionParameter (name, param_type, required). When provided and in_types is empty, in_types is built from it. Reused by xwbots and OpenAPI. Prefer markers from :mod:`exonware.xwschema.types_basic` (e.g. ``import exonware.xwschema.types_basic as param``) or :mod:`exonware.xwschema.types_base`; plain ``str`` infers a built-in kind from the parameter name when there are no explicit constraints.
             context_params: Param names to skip validation (framework-injected, e.g. session, message, context). Overrides default.
             dependencies: FastAPI-style dependencies
             responses: OpenAPI responses
@@ -193,11 +199,12 @@ class XWAction(AAction, XWObject):
                     if ap.schema is not None:
                         self._in_types[ap.name] = XWSchema(ap.schema)
                     else:
-                        schema_dict = self._type_to_schema_dict(ap.param_type, ap.required)
-                        for key in ("description", "default", "enum", "pattern", "minLength", "maxLength", "minimum", "maximum", "example", "format"):
-                            val = getattr(ap, key, None)
-                            if val is not None:
-                                schema_dict[key] = val
+                        schema_dict = ap.to_schema_dict()
+                        if getattr(ap.param_type, "__kind_id__", None) is None:
+                            for key in ("description", "default", "enum", "pattern", "minLength", "maxLength", "minimum", "maximum", "example", "format"):
+                                val = getattr(ap, key, None)
+                                if val is not None:
+                                    schema_dict[key] = val
                         self._in_types[ap.name] = XWSchema(schema_dict)
         self._dependencies = dependencies
         self._responses = responses
@@ -945,7 +952,50 @@ class XWAction(AAction, XWObject):
             else:
                 # Last resort: log warning but don't fail
                 logger.debug(f"[{self.api_name}] Could not extract parameter names for auto-population: {e}")
-        return auto_in_types
+        # Enrich plain ``str`` parameters using :data:`exonware.xwschema.types_base.param_name_to_kind`
+        # (same idea as :meth:`ActionParameter.to_schema_dict` for ``param_type=str``).
+        try:
+            from exonware.xwschema.types_base import kind_for_param_name, schema_fragment
+        except ImportError:
+            return auto_in_types
+
+        def _annotation_is_plain_str(tp: Any) -> bool:
+            if tp is str:
+                return True
+            o = get_origin(tp)
+            if o is Union or (_UnionType is not _UT_MISSING and o is _UnionType):
+                args = [a for a in (get_args(tp) or ()) if a is not type(None)]
+                return len(args) == 1 and args[0] is str
+            return False
+
+        def _plain_string_schema_dict(d: dict[str, Any]) -> bool:
+            if d.get("type") != "string":
+                return False
+            return not any(
+                d.get(k)
+                for k in ("pattern", "format", "enum", "minLength", "maxLength", "oneOf", "allOf", "anyOf")
+            )
+
+        enriched: dict[str, XWSchema] = {}
+        for pname, sch in auto_in_types.items():
+            pinfo = (self._parameters or {}).get(pname)
+            native: dict[str, Any] = {}
+            if hasattr(sch, "to_native"):
+                raw = sch.to_native()
+                if isinstance(raw, dict):
+                    native = raw
+            if pinfo is not None and _annotation_is_plain_str(pinfo.type) and _plain_string_schema_dict(native):
+                kid = kind_for_param_name(pname)
+                if kid:
+                    try:
+                        frag = schema_fragment(kid)
+                        merged = {**native, **frag}
+                        enriched[pname] = XWSchema(merged)
+                        continue
+                    except KeyError:
+                        pass
+            enriched[pname] = sch
+        return enriched
 
     def _auto_populate_out_types(self) -> dict[str, XWSchema]:
         """
@@ -988,6 +1038,14 @@ class XWAction(AAction, XWObject):
         if _depth > MAX_RECURSION_DEPTH:
             logger.warning(f"Recursion depth limit reached in _type_to_schema_dict for type {param_type}, using 'object' fallback")
             return {"type": "object"}
+        tid = getattr(param_type, "__kind_id__", None)
+        if isinstance(tid, str) and tid.strip():
+            from exonware.xwschema.types_base import kind_for
+
+            spec = kind_for(tid.strip())
+            if spec is not None:
+                # XWSchema (and catalog kinds) expose JSON Schema fragments via ``to_native()``.
+                return dict(spec.to_native())
         schema: dict[str, Any] = {}
         # Handle None type
         if param_type is None or param_type is type(None):

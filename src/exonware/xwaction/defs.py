@@ -84,17 +84,8 @@ class ActionParameter:
         type_str = getattr(self.param_type, "__name__", str(self.param_type))
         return f"{self.name} ({type_str})" + ("" if self.required else " [optional]")
 
-    def to_schema_dict(self) -> dict[str, Any]:
-        """Build a JSON Schema dict from this parameter (used when schema is None)."""
-        type_map = {
-            str: "string",
-            int: "integer",
-            float: "number",
-            bool: "boolean",
-            list: "array",
-            dict: "object",
-        }
-        out: dict[str, Any] = {"type": type_map.get(self.param_type, "string")}
+    def _merge_schema_field_overrides(self, out: dict[str, Any]) -> dict[str, Any]:
+        """Apply explicit ActionParameter JSON Schema fields onto a base fragment."""
         if self.description is not None:
             out["description"] = self.description
         if self.default is not None:
@@ -116,3 +107,47 @@ class ActionParameter:
         if self.format is not None:
             out["format"] = self.format
         return out
+
+    def to_schema_dict(self) -> dict[str, Any]:
+        """Build a JSON Schema dict from this parameter."""
+        if self.schema is not None:
+            return dict(self.schema)
+        tid = getattr(self.param_type, "__kind_id__", None)
+        if isinstance(tid, str) and tid.strip():
+            from exonware.xwschema.types_base import kind_for
+
+            spec = kind_for(tid.strip())
+            if spec is not None:
+                out = dict(spec.to_native())
+                return self._merge_schema_field_overrides(out)
+        # Plain str with no explicit constraints: reuse built-in kinds from the parameter name.
+        if self.param_type is str:
+            has_explicit = (
+                self.enum is not None
+                or self.pattern is not None
+                or self.format is not None
+                or self.minLength is not None
+                or self.maxLength is not None
+                or self.minimum is not None
+                or self.maximum is not None
+            )
+            if not has_explicit:
+                from exonware.xwschema.types_base import kind_for_param_name, schema_fragment
+
+                kid = kind_for_param_name(self.name)
+                if kid:
+                    try:
+                        out = dict(schema_fragment(kid))
+                        return self._merge_schema_field_overrides(out)
+                    except KeyError:
+                        pass
+        type_map = {
+            str: "string",
+            int: "integer",
+            float: "number",
+            bool: "boolean",
+            list: "array",
+            dict: "object",
+        }
+        out: dict[str, Any] = {"type": type_map.get(self.param_type, "string")}
+        return self._merge_schema_field_overrides(out)
