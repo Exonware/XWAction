@@ -17,7 +17,7 @@
 # =============================================================================
 # CORE DEPENDENCIES
 # =============================================================================
-# Source size (src/*): ~355.8 KB
+# Source size (src/*): ~355.1 KB
 pip                     # Package installer (CI and lazy install)
 
 # Add your core dependencies here

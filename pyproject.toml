@@ -1,6 +1,6 @@
 
 # project-src-size=361574 ; 0.35 MB
-# Source size (src/*): ~355.8 KB
+# Source size (src/*): ~355.1 KB
 [build-system]
   requires = ["hatchling"]
   build-backend = "hatchling.build"
@@ -17,8 +17,8 @@ dynamic = ["version"]
     "exonware-xwdata==0.9.0.17",
     "exonware-xwjson==0.9.0.23",
     "exonware-xwquery==0.9.0.15",
-    "exonware-xwschema==0.4.0.12",
-    "exonware-xwsystem==0.9.0.39",
+    "exonware-xwschema==0.4.0.18",
+    "exonware-xwsystem==0.9.0.41",
   ]
   # total = src + base deps; refresh via commands measure_dependency_sizes xwaction
   authors = [{ name = "eXonware Backend Team" }]
@@ -32,30 +32,30 @@ dynamic = ["version"]
       "exonware-xwdata==0.9.0.17",
       "exonware-xwjson==0.9.0.23",
       "exonware-xwquery==0.9.0.15",
-      "exonware-xwschema==0.4.0.12",
+      "exonware-xwschema==0.4.0.18",
     ]
     lazy = [
-      "exonware-xwaction[xw]==0.9.0.12",
+      "exonware-xwaction[xw]==0.9.0.14",
       "exonware-xwlazy==1.0.1.81",
-      "exonware-xwsystem[lazy]==0.9.0.39",
+      "exonware-xwsystem[lazy]==0.9.0.41",
       "exonware-xwdata[xw]==0.9.0.17",
       "exonware-xwjson[xw]==0.9.0.23",
       "exonware-xwquery[xw]==0.9.0.15",
-      "exonware-xwschema[xw]==0.4.0.12",
+      "exonware-xwschema[xw]==0.4.0.18",
     ]
     full = [
-      "exonware-xwaction[xw]==0.9.0.12",
-      "exonware-xwsystem[full]==0.9.0.39",
+      "exonware-xwaction[xw]==0.9.0.14",
+      "exonware-xwsystem[full]==0.9.0.41",
       "exonware-xwdata[xw]==0.9.0.17",
       "exonware-xwjson[xw]==0.9.0.23",
       "exonware-xwquery[xw]==0.9.0.15",
-      "exonware-xwschema[xw]==0.4.0.12",
+      "exonware-xwschema[xw]==0.4.0.18",
       "fastapi",
       "prefect",
       "unidecode",
     ]
     dev = [
-      "exonware-xwaction[full]==0.9.0.12",
+      "exonware-xwaction[full]==0.9.0.14",
       "black>=23.0.0",
       "isort>=5.12.0",
       "mypy>=1.0.0",

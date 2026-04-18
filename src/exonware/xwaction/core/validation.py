@@ -1,4 +1,4 @@
-#exonware/xwaction/core/validation.py
+# src/exonware/xwaction/core/validation.py
 """
 XWAction Validation Engine
 Input/output validation and contract management for actions.
@@ -41,28 +41,6 @@ def coerce_explicit_none_to_defaults(action: Any, kwargs: dict[str, Any]) -> Non
             changed.append(pname)
     if not changed:
         return
-    # #region agent log
-    try:
-        import json
-        import time
-        from pathlib import Path
-
-        payload = {
-            "sessionId": "817459",
-            "hypothesisId": "H-null-default",
-            "location": "xwaction/core/validation.coerce_explicit_none_to_defaults",
-            "message": "coerced None to signature default",
-            "data": {
-                "action": getattr(action, "api_name", None),
-                "params": changed,
-            },
-            "timestamp": int(time.time() * 1000),
-        }
-        with Path("debug-817459.log").open("a", encoding="utf-8") as _df:
-            _df.write(json.dumps(payload) + "\n")
-    except Exception:
-        pass
-    # #endregion
 
 
 def _get_context_params(action: Any) -> frozenset[str]:
