@@ -1,4 +1,4 @@
-#exonware/xwaction/facade.py
+# src/exonware/xwaction/facade.py
 """
 XWAction Facade - Modular Implementation
 Production-grade action decorator with comprehensive features.
@@ -18,7 +18,6 @@ except ImportError:  # Python < 3.10
 
 from typing import Any, Union, get_args, get_origin, get_type_hints
 import inspect
-import time
 from datetime import datetime
 from functools import wraps
 from .base import AAction
@@ -600,14 +599,6 @@ class XWAction(AAction, XWObject):
                 logger.warning(f"[{self.api_name}] {warning}")
         @wraps(func)
         def wrapper(*args, **kwargs):
-            # #region agent log
-            from exonware.xwsystem.io.serialization import JsonSerializer
-            import time
-            try:
-                with open(r'd:\OneDrive\DEV\exonware\.cursor\debug.log', 'a', encoding='utf-8') as f:
-                    f.write(JsonSerializer().encode({"sessionId":"debug-session","runId":"run1","hypothesisId":"A","location":"facade.py:541","message":"Wrapper called","data":{"args_count":len(args),"kwargs_keys":list(kwargs.keys()),"first_arg_type":str(type(args[0])) if args else None,"first_arg_has_actions":hasattr(args[0],'_actions') if args else None},"timestamp":int(time.time()*1000)})+'\n')
-            except: pass
-            # #endregion
             # Use context from kwargs if provided (e.g. from bot command handler with user_roles)
             if 'context' in kwargs and isinstance(kwargs.get('context'), dict):
                 ctx_dict = kwargs['context']
@@ -666,12 +657,6 @@ class XWAction(AAction, XWObject):
                     validation_kwargs = kwargs
             coerce_explicit_none_to_defaults(self, validation_kwargs)
             # Permissions
-            # #region agent log
-            try:
-                with open(r'd:\OneDrive\DEV\exonware\.cursor\debug.log', 'a', encoding='utf-8') as f:
-                    f.write(JsonSerializer().encode({"sessionId":"debug-session","runId":"run1","hypothesisId":"G","location":"facade.py:590","message":"Permission check","data":{"action_name":self.api_name,"required_roles":self._roles,"context_roles":context.metadata.get("roles",[]),"has_permission":self.check_permissions(context)},"timestamp":int(time.time()*1000)})+'\n')
-            except: pass
-            # #endregion
             if not self.check_permissions(context):
                 raise XWActionExecutionError(
                     self.api_name, 
@@ -695,12 +680,6 @@ class XWAction(AAction, XWObject):
             except Exception as ve:
                 if isinstance(ve, XWActionExecutionError):
                     raise
-            # #region agent log
-            try:
-                with open(r'd:\OneDrive\DEV\exonware\.cursor\debug.log', 'a', encoding='utf-8') as f:
-                    f.write(JsonSerializer().encode({"sessionId":"debug-session","runId":"run1","hypothesisId":"D","location":"facade.py:603","message":"About to call _execute_wrapper","data":{"args_count":len(args),"kwargs_keys":list(kwargs.keys()),"first_arg_type":str(type(args[0])) if args else None},"timestamp":int(time.time()*1000)})+'\n')
-            except: pass
-            # #endregion
             # Remove context from kwargs if func doesn't accept it (avoid TypeError)
             kwargs_for_call = dict(kwargs)
             if 'context' in kwargs_for_call:
@@ -1149,17 +1128,6 @@ class XWAction(AAction, XWObject):
 
     def _execute_wrapper(self, func: Callable, *args, **kwargs):
         """Execute the wrapped function."""
-        # #region agent log
-        from exonware.xwsystem.io.serialization import JsonSerializer
-        import time
-        import inspect
-        try:
-            sig = inspect.signature(func)
-            param_names = list(sig.parameters.keys())
-            with open(r'd:\OneDrive\DEV\exonware\.cursor\debug.log', 'a', encoding='utf-8') as f:
-                f.write(JsonSerializer().encode({"sessionId":"debug-session","runId":"run1","hypothesisId":"E","location":"facade.py:1032","message":"_execute_wrapper called","data":{"func_name":func.__name__,"args_count":len(args),"kwargs_keys":list(kwargs.keys()),"param_names":param_names,"first_param":param_names[0] if param_names else None,"first_arg_type":str(type(args[0])) if args else None},"timestamp":int(time.time()*1000)})+'\n')
-        except: pass
-        # #endregion
         # Create context for metadata
         context = ActionContext(
             actor="user",
@@ -1173,19 +1141,7 @@ class XWAction(AAction, XWObject):
         )
         # Execute the function directly
         try:
-            # #region agent log
-            try:
-                with open(r'd:\OneDrive\DEV\exonware\.cursor\debug.log', 'a', encoding='utf-8') as f:
-                    f.write(JsonSerializer().encode({"sessionId":"debug-session","runId":"run1","hypothesisId":"E","location":"facade.py:1048","message":"About to call original func","data":{"func_name":func.__name__,"args_count":len(args),"first_arg_type":str(type(args[0])) if args else None},"timestamp":int(time.time()*1000)})+'\n')
-            except: pass
-            # #endregion
             result = func(*args, **kwargs)
-            # #region agent log
-            try:
-                with open(r'd:\OneDrive\DEV\exonware\.cursor\debug.log', 'a', encoding='utf-8') as f:
-                    f.write(JsonSerializer().encode({"sessionId":"debug-session","runId":"run1","hypothesisId":"E","location":"facade.py:1050","message":"Original func call succeeded","data":{"func_name":func.__name__},"timestamp":int(time.time()*1000)})+'\n')
-            except: pass
-            # #endregion
             return result
         except Exception as e:
             raise XWActionError(f"Action execution failed: {str(e)}")
