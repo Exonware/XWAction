@@ -15,6 +15,7 @@ from .defs import ActionEngineType
 from ..context import ActionContext, ActionResult
 from ..defs import ActionProfile
 from exonware.xwsystem import get_logger
+from ..http_annotations import is_http_framework_injection_type
 # Optional dependencies imported directly (using xwsystem lazy import support)
 from fastapi import FastAPI, HTTPException, Body, Depends, Request, Response, BackgroundTasks, Form, Query
 from fastapi.params import Param, Depends as DependsType, Body as BodyParam
@@ -162,10 +163,21 @@ class FastAPIActionEngine(AActionEngineBase):
             if request_obj and isinstance(request_obj, Request) and original_sig:
                 # Get auto-extracted params (params in execution_kwargs but not in original signature)
                 original_param_names = set(original_sig.parameters.keys())
-                auto_extracted = {k: v for k, v in execution_kwargs.items() 
+                auto_extracted = {k: v for k, v in execution_kwargs.items()
                                 if k not in original_param_names and k not in path_param_names}
+                # Starlette/FastAPI reserves these names on Request; setattr'ing any of them
+                # turns the Request object into a broken husk (e.g. scope=None). An in_types
+                # field with one of these names is always a body field that the handler should
+                # read from request.form()/json(), never an attribute to overwrite.
+                _RESERVED_REQUEST_ATTRS = {
+                    "scope", "state", "app", "session", "receive", "send", "url", "headers",
+                    "query_params", "path_params", "cookies", "client", "method", "base_url",
+                    "url_for", "user", "auth",
+                }
                 # Attach extracted params to Request object as attributes
                 for param_name, param_value in auto_extracted.items():
+                    if param_name in _RESERVED_REQUEST_ATTRS:
+                        continue
                     setattr(request_obj, param_name, param_value)
             # Filter execution_kwargs to only include parameters the original function expects
             # This prevents TypeError when calling function with unexpected kwargs
@@ -200,6 +212,10 @@ class FastAPIActionEngine(AActionEngineBase):
                     status_code = 400
                 elif "Permission" in type(e).__name__ or "Auth" in type(e).__name__:
                     status_code = 403
+                elif type(e).__name__ == "ModuleNotFoundError":
+                    # Builtin **and** e.g. ``exonware.xwsystem.runtime.errors.ModuleNotFoundError`` share this
+                    # name; substring "NotFound" must not turn missing-dependency failures into HTTP 404.
+                    status_code = 500
                 elif "NotFound" in type(e).__name__:
                     status_code = 404
                 else:
@@ -281,12 +297,30 @@ class FastAPIActionEngine(AActionEngineBase):
             request_param = None
             in_types = getattr(action, 'in_types', None) or {}
             # Check if function signature only has Request (and maybe Response/BackgroundTasks)
-            regular_params = [p for p in sig.parameters.values() 
-                            if p.name not in ('self', 'cls') 
-                            and p.annotation not in (Request, Response, BackgroundTasks)
-                            and not isinstance(p.default, (DependsType, BodyParam, Param))]
-            request_params = [p for p in sig.parameters.values() 
-                            if p.annotation == Request]
+            request_params: list[inspect.Parameter] = []
+            for p in sig.parameters.values():
+                if p.name in ('self', 'cls'):
+                    continue
+                hinted = type_hints.get(p.name, inspect.Parameter.empty)
+                raw_ann = p.annotation
+                core_ann = hinted if hinted is not inspect.Parameter.empty else raw_ann
+                if is_http_framework_injection_type(core_ann):
+                    request_params.append(p)
+            regular_params = []
+            for p in sig.parameters.values():
+                if p.name in ('self', 'cls'):
+                    continue
+                hinted = type_hints.get(p.name, inspect.Parameter.empty)
+                raw_ann = p.annotation
+                core_ann = hinted if hinted is not inspect.Parameter.empty else raw_ann
+                if is_http_framework_injection_type(core_ann):
+                    continue
+                if isinstance(p.default, (DependsType, BodyParam, Param)) or (
+                    hasattr(p.default, '__class__')
+                    and any(c.__name__ == 'Depends' for c in p.default.__class__.__mro__)
+                ):
+                    continue
+                regular_params.append(p)
             if len(regular_params) == 0 and len(request_params) == 1 and in_types:
                 has_only_request = True
                 request_param = request_params[0]
@@ -299,10 +333,14 @@ class FastAPIActionEngine(AActionEngineBase):
             is_body_method = method.upper() in ("POST", "PUT", "PATCH")
             is_get_method = method.upper() == "GET"
             # If we have in_types and only Request parameter, create parameters from in_types
+            request_param_names = {p.name for p in request_params}
             if has_only_request and in_types:
                 for param_name, schema in in_types.items():
                     # Skip path parameters (they're already handled)
                     if param_name in path_param_names:
+                        continue
+                    # Do not synthesize query/body params that collide with the injected Request name
+                    if param_name in request_param_names:
                         continue
                     # Convert schema to Python type and default
                     param_type = str  # Default to str
@@ -337,7 +375,13 @@ class FastAPIActionEngine(AActionEngineBase):
                 # Skip 'self' and 'cls'
                 if param_name in ('self', 'cls'):
                     continue
-                annotation = type_hints.get(param_name, param.annotation)
+                hinted = type_hints.get(param_name, inspect.Parameter.empty)
+                raw_ann = param.annotation
+                core_ann = hinted if hinted is not inspect.Parameter.empty else raw_ann
+                if is_http_framework_injection_type(core_ann):
+                    new_params.append(param.replace(annotation=core_ann))
+                    continue
+                annotation = core_ann
                 if annotation == inspect.Parameter.empty:
                     annotation = Any
                 # Check for Path Parameters
@@ -353,8 +397,7 @@ class FastAPIActionEngine(AActionEngineBase):
                     (hasattr(param.default, '__class__') and 
                      any(c.__name__ == 'Depends' for c in param.default.__class__.__mro__))
                 )
-                is_special_type = annotation in (Request, Response, BackgroundTasks)
-                if is_dependency or is_special_type:
+                if is_dependency:
                     # Keep exactly as is
                     new_params.append(param.replace(annotation=annotation))
                     continue
@@ -379,11 +422,15 @@ class FastAPIActionEngine(AActionEngineBase):
             # Add auto-generated parameters from in_types
             if has_only_request and in_types:
                 # Add Request parameter first (if it exists)
-                if request_param:
+                if request_param and request_param.name not in {p.name for p in new_params}:
                     new_params.append(request_param)
                 # Add query parameters for GET
                 if is_get_method and query_params_fields:
+                    _existing_param_names = {p.name for p in new_params}
                     for param_name, (param_type, param_default) in query_params_fields.items():
+                        # Signature may already declare Query/Form/Depends params matching in_types.
+                        if param_name in _existing_param_names:
+                            continue
                         if param_default != inspect.Parameter.empty:
                             default = Query(default=param_default)
                         else:
@@ -398,7 +445,10 @@ class FastAPIActionEngine(AActionEngineBase):
                         )
                 # Add form parameters for POST/PUT/PATCH
                 elif is_body_method and form_params_fields:
+                    _existing_param_names = {p.name for p in new_params}
                     for param_name, (param_type, param_default) in form_params_fields.items():
+                        if param_name in _existing_param_names:
+                            continue
                         if param_default != inspect.Parameter.empty:
                             default = Form(default=param_default)
                         else:
@@ -414,14 +464,28 @@ class FastAPIActionEngine(AActionEngineBase):
             else:
                 # Normal flow: add Request if it exists
                 for param_name, param in sig.parameters.items():
-                    if param.annotation == Request and param_name not in [p.name for p in new_params]:
+                    hinted = type_hints.get(param_name, inspect.Parameter.empty)
+                    raw_ann = param.annotation
+                    core_ann = hinted if hinted is not inspect.Parameter.empty else raw_ann
+                    if (
+                        is_http_framework_injection_type(core_ann)
+                        and param_name not in {p.name for p in new_params}
+                    ):
                         new_params.append(param)
             # --- 2. Create Pydantic Model for Body (if needed) ---
             RequestModel = None
             if is_body_method and body_params_fields:
                 func_module = getattr(func, '__module__', None)
+                model_override = getattr(action, "openapi_request_model_name", None) or getattr(
+                    action, "_openapi_request_model_name", None
+                )
                 # Use base class helper to create input model
-                RequestModel = self._create_input_model(action.api_name, body_params_fields, func_module)
+                RequestModel = self._create_input_model(
+                    action.api_name,
+                    body_params_fields,
+                    func_module,
+                    model_name=model_override,
+                )
             # --- 3. Add Body Parameter to Signature ---
             if RequestModel:
                 new_params.append(
@@ -477,6 +541,8 @@ class FastAPIActionEngine(AActionEngineBase):
                 "tags": tags if tags else None,
                 "name": operation_id,
             }
+            if getattr(action, "include_in_schema", True) is False:
+                route_kwargs["include_in_schema"] = False
             # Streaming actions typically return async iterators which are not valid
             # Pydantic response models; disable FastAPI response model generation.
             if is_streaming_action:

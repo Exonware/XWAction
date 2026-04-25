@@ -8,6 +8,8 @@ import sys
 import inspect
 import asyncio
 from typing import Any, get_type_hints
+
+from ..http_annotations import is_http_framework_injection_type, unwrap_annotation_for_openapi
 from .contracts import IActionEngine
 from .defs import ActionEngineType
 from ..context import ActionContext, ActionResult
@@ -199,6 +201,8 @@ class AActionEngineBase(IActionEngine):
         """
         if annotation is Any or annotation is inspect.Parameter.empty:
             return True
+        if is_http_framework_injection_type(annotation):
+            return False
         # Common service types to exclude from serialization
         non_serializable_patterns = [
             'requests.sessions.Session',
@@ -219,8 +223,14 @@ class AActionEngineBase(IActionEngine):
                 return False
         return True
 
-    def _create_input_model(self, api_name: str, fields: dict[str, Any], 
-                           module: str | None = None) -> Any | None:
+    def _create_input_model(
+        self,
+        api_name: str,
+        fields: dict[str, Any],
+        module: str | None = None,
+        *,
+        model_name: str | None = None,
+    ) -> Any | None:
         """
         Generic helper to create a Pydantic model for input validation.
         Returns None if Pydantic is not installed.
@@ -229,8 +239,17 @@ class AActionEngineBase(IActionEngine):
             return None
         try:
             model_kwargs = {"__module__": module} if module else {}
+            if model_name and str(model_name).strip():
+                pascal = str(model_name).strip()
+            else:
+                pascal_parts = [p for p in str(api_name).replace("-", "_").split("_") if p]
+                pascal = "".join(part[:1].upper() + part[1:] for part in pascal_parts) or "Action"
+            # OpenAPI component names must be token-friendly (no spaces); strip accidental noise.
+            pascal = "".join(ch for ch in pascal if ch.isalnum() or ch == "_") or "Action"
+            if not pascal.endswith("Request"):
+                pascal = f"{pascal}Request"
             RequestModel = create_model(
-                f"{api_name}_Input",
+                pascal,
                 **model_kwargs,
                 **fields
             )

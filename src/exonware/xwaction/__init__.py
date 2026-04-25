@@ -33,7 +33,7 @@ from .errors import (
     XWActionPermissionError,
     XWActionExecutionError
 )
-from .defs import ActionProfile, ActionHandlerPhase, ActionParameter
+from .defs import ActionProfile, ActionSecurityLevel, ActionHandlerPhase, ActionParameter
 from .config import (
     XWActionConfig,
     ProfileConfig,
@@ -78,6 +78,7 @@ __all__ = [
     "XWActionPermissionError",
     "XWActionExecutionError",
     "ActionProfile",
+    "ActionSecurityLevel",
     "ActionHandlerPhase",
     "ActionParameter",
     "XWActionConfig",

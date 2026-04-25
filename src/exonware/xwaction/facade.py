@@ -18,12 +18,13 @@ except ImportError:  # Python < 3.10
 
 from typing import Any, Union, get_args, get_origin, get_type_hints
 import inspect
+import sys
 from datetime import datetime
 from functools import wraps
 from .base import AAction
 from exonware.xwsystem.shared import XWObject
 from .contracts import IAction, IActionAuthorizer, AuthzDecision
-from .defs import ActionProfile, ParamInfo, ActionParameter  # Enums and types from defs.py
+from .defs import ActionProfile, ActionSecurityLevel, ParamInfo, ActionParameter  # Enums and types from defs.py
 from .config import ProfileConfig, PROFILE_CONFIGS  # Config from config.py
 from .context import ActionContext, ActionResult  # Context from context.py
 from .core import (
@@ -39,6 +40,7 @@ from .errors import (
 from exonware.xwschema import XWSchema, XWSchemaValidationError
 # Fully reuse xwsystem for logging
 from exonware.xwsystem import get_logger
+from .http_annotations import is_http_framework_injection_type, unwrap_annotation_for_openapi
 logger = get_logger(__name__)
 
 
@@ -75,6 +77,8 @@ class XWAction(AAction, XWObject):
                  smart_mode: str | bool = False,
                  # Security
                  security: str | list[str] | dict[str, list[str]] | None = None,
+                 security_level: str | ActionSecurityLevel | None = None,
+                 expose_http: bool | None = None,
                  roles: list[str] | None = None,
                  rate_limit: str | None = None,
                  audit: bool | None = None,
@@ -112,6 +116,8 @@ class XWAction(AAction, XWObject):
                  responses: dict[int, dict[str, str]] | None = None,
                  examples: dict[str, Any] | None = None,
                  deprecated: bool = False,
+                 openapi_request_model_name: str | None = None,
+                 include_in_schema: bool = True,
                  # Internal
                  func: Callable | None = None):
         """
@@ -151,6 +157,10 @@ class XWAction(AAction, XWObject):
             responses: OpenAPI responses
             examples: OpenAPI examples
             deprecated: Deprecated flag
+            openapi_request_model_name: Optional curated Pydantic model name for the composed JSON
+                body (FastAPI engines). When unset, the engine derives a name from ``api_name``.
+            include_in_schema: When ``False``, FastAPI omits the operation from the generated OpenAPI
+                document (passed to ``add_api_route``). Default ``True``.
             func: Function to decorate
         """
         # Store configuration
@@ -161,6 +171,15 @@ class XWAction(AAction, XWObject):
         self._description = description
         self._tags = tags or []
         self._security = security
+        self._security_level = self._resolve_security_level(security_level)
+        if expose_http is None:
+            # Safe default: high/critical actions are private unless explicitly exposed.
+            self._expose_http = self._security_level in {
+                ActionSecurityLevel.LOW,
+                ActionSecurityLevel.MEDIUM,
+            }
+        else:
+            self._expose_http = bool(expose_http)
         self._roles = roles or []
         self._rate_limit = rate_limit
         self._audit = audit
@@ -253,6 +272,8 @@ class XWAction(AAction, XWObject):
         self._summary = summary
         self._description = description
         self._roles = roles or []
+        self._openapi_request_model_name = openapi_request_model_name
+        self._include_in_schema = bool(include_in_schema)
         if not self._action_parameters:
             self._in_types = in_types or {}
         self._out_types = out_types or {}
@@ -271,6 +292,16 @@ class XWAction(AAction, XWObject):
     def api_name(self) -> str:
         """Get API name."""
         return self._api_name or (self._func.__name__ if self._func else "unknown")
+    @property
+
+    def openapi_request_model_name(self) -> str | None:
+        """Optional OpenAPI / Pydantic model name override for composed request bodies."""
+        return self._openapi_request_model_name
+    @property
+
+    def include_in_schema(self) -> bool:
+        """Whether this HTTP action appears in the generated OpenAPI schema (FastAPI)."""
+        return getattr(self, "_include_in_schema", True)
     @property
 
     def cmd_shortcut(self) -> str | None:
@@ -296,6 +327,16 @@ class XWAction(AAction, XWObject):
     def security_config(self) -> Any:
         """Get security configuration."""
         return self._security
+    @property
+
+    def security_level(self) -> ActionSecurityLevel:
+        """Get declared transport exposure security level."""
+        return self._security_level
+    @property
+
+    def expose_http(self) -> bool:
+        """Whether this action is eligible for HTTP route registration."""
+        return bool(getattr(self, "_expose_http", True))
     @property
 
     def roles(self) -> list[str]:
@@ -496,6 +537,17 @@ class XWAction(AAction, XWObject):
         # Default to ACTION profile
         return ActionProfile.ACTION
 
+    def _resolve_security_level(self, security_level: str | ActionSecurityLevel | None) -> ActionSecurityLevel:
+        """Resolve action security level with robust fallback."""
+        if isinstance(security_level, ActionSecurityLevel):
+            return security_level
+        if isinstance(security_level, str) and security_level.strip():
+            raw = security_level.strip().lower()
+            for level in ActionSecurityLevel:
+                if level.value == raw:
+                    return level
+        return ActionSecurityLevel.MEDIUM
+
     def _merge_configuration(self, profile_config: ProfileConfig) -> dict[str, Any]:
         """Merge configuration with profile defaults."""
         config = {
@@ -505,6 +557,8 @@ class XWAction(AAction, XWObject):
             "description": self._description,
             "tags": self._tags,
             "security": self._security or profile_config.security,
+            "security_level": self._security_level.value,
+            "expose_http": self._expose_http,
             "roles": self._roles,
             "rate_limit": self._rate_limit or profile_config.rate_limit,
             "audit": self._audit if self._audit is not None else profile_config.audit,
@@ -702,6 +756,10 @@ class XWAction(AAction, XWObject):
         wrapper.in_types = self._in_types
         wrapper._action_parameters = getattr(self, '_action_parameters', [])
         wrapper.context_params = self._context_params
+        wrapper.openapi_request_model_name = self._openapi_request_model_name
+        wrapper.include_in_schema = self.include_in_schema
+        wrapper.security_level = self.security_level
+        wrapper.expose_http = self.expose_http
         return wrapper
 
     def _resolve_openapi_fields(self, func: Callable):
@@ -839,6 +897,10 @@ class XWAction(AAction, XWObject):
         # and should not be in in_types validation
         for param_name in signature_params - declared_params:
             param_info = self._parameters[param_name]
+            if is_http_framework_injection_type(
+                unwrap_annotation_for_openapi(getattr(param_info, "type", None))
+            ):
+                continue
             # Skip **kwargs parameters - they're meant to accept variable keyword arguments
             if hasattr(param_info, 'kind') and param_info.kind == inspect.Parameter.VAR_KEYWORD:
                 continue
@@ -915,12 +977,23 @@ class XWAction(AAction, XWObject):
                 name for name, param in sig.parameters.items()
                 if name not in ('self', 'cls')
             ]
+            try:
+                func_module = sys.modules.get(self._func.__module__) if hasattr(self._func, "__module__") else None
+                globalns = func_module.__dict__ if func_module else None
+                type_hints = get_type_hints(self._func, globalns=globalns, include_extras=True)
+            except Exception:
+                type_hints = {}
             # Map schemas to parameter names
             # XWSchema.extract_parameters should return schemas in the same order as parameters
             # (excluding 'self' and 'cls')
             for i, schema in enumerate(in_schemas):
                 if i < len(param_names):
-                    auto_in_types[param_names[i]] = schema
+                    pname = param_names[i]
+                    raw_ann = sig.parameters[pname].annotation
+                    ann = type_hints.get(pname, raw_ann)
+                    if is_http_framework_injection_type(ann):
+                        continue
+                    auto_in_types[pname] = schema
         except Exception as e:
             # Fallback: try to use _parameters if available
             if hasattr(self, '_parameters') and self._parameters:
@@ -1335,6 +1408,8 @@ class XWAction(AAction, XWObject):
             tags=data.get("tags", []),
             profile=data.get("profile"),
             security=data.get("security"),
+            security_level=data.get("security_level"),
+            expose_http=data.get("expose_http"),
             roles=data.get("roles", []),
             rate_limit=data.get("rate_limit"),
             audit=data.get("audit"),
@@ -1510,6 +1585,8 @@ class XWAction(AAction, XWObject):
             "tags": self._tags,
             "profile": self._profile.value if hasattr(self, '_profile') else None,
             "security": self._security,
+            "security_level": self._security_level.value,
+            "expose_http": self._expose_http,
             "roles": self._roles,
             "rate_limit": self._rate_limit,
             "audit": self._audit,

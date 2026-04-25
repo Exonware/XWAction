@@ -239,7 +239,15 @@ class FlaskActionEngine(AActionEngineBase):
             RequestModel = None
             if is_body_method and body_params_fields:
                 func_module = getattr(func, '__module__', None)
-                RequestModel = self._create_input_model(action.api_name, body_params_fields, func_module)
+                model_override = getattr(action, "openapi_request_model_name", None) or getattr(
+                    action, "_openapi_request_model_name", None
+                )
+                RequestModel = self._create_input_model(
+                    action.api_name,
+                    body_params_fields,
+                    func_module,
+                    model_name=model_override,
+                )
             # --- 3. Create Handler ---
             handler = self._create_route_handler(
                 action, func, sig, path_param_names, method, endpoint_path, RequestModel

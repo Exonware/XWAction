@@ -19,6 +19,15 @@ class ActionProfile(Enum):
     ENDPOINT = "endpoint"   # API endpoint operations
 
 
+class ActionSecurityLevel(Enum):
+    """Security/exposure sensitivity for action transport surfaces."""
+
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
+
+
 class ActionHandlerPhase(Enum):
     """Execution phases for action handlers."""
     BEFORE = "before"       # Before execution
