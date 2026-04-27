@@ -10,7 +10,7 @@ name = "xwaction"
 dynamic = [
     "version",
 ]
-description = "Convenience wrapper for exonware-xwaction - provides 'import xwaction' alias"
+description = "Convenience wrapper for exonware-xwaction==0.9.0.16 - provides 'import xwaction' alias"
 readme = "README.md"
 requires-python = ">=3.12"
 keywords = [
@@ -23,7 +23,7 @@ keywords = [
 ]
 classifiers = []
 dependencies = [
-    "exonware-xwaction",
+    "exonware-xwaction==0.9.0.16",
 ]
 authors = [
     { name = "eXonware Backend Team" },
@@ -35,16 +35,16 @@ text = "Apache-2.0"
 [project.optional-dependencies]
     # First-party XW libs composed by this package (excludes exonware-xwsystem==0.9.0.37; see lazy/full).
 xw = [
-    "exonware-xwaction[xw]",
+    "exonware-xwaction[xw]==0.9.0.16",
 ]
 lazy = [
-    "exonware-xwaction[lazy]",
+    "exonware-xwaction[lazy]==0.9.0.16",
 ]
 full = [
-    "exonware-xwaction[full]",
+    "exonware-xwaction[full]==0.9.0.16",
 ]
 dev = [
-    "exonware-xwaction[dev]",
+    "exonware-xwaction[dev]==0.9.0.16",
 ]
 
 [project.urls]

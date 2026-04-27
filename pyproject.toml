@@ -14,10 +14,10 @@ dynamic = ["version"]
   keywords = ["action", "workflow", "automation", "execution", "tasks", "exonware"]
   classifiers = []
   dependencies = [
-    "exonware-xwdata==0.9.0.17",
+    "exonware-xwdata==0.9.0.18",
     "exonware-xwjson==0.9.0.24",
     "exonware-xwquery==0.9.0.16",
-    "exonware-xwschema==0.4.0.18",
+    "exonware-xwschema==0.4.0.19",
     "exonware-xwsystem==0.9.0.43",
   ]
   # total = src + base deps; refresh via commands measure_dependency_sizes xwaction
@@ -29,33 +29,33 @@ dynamic = ["version"]
   [project.optional-dependencies]
     # First-party XW libs composed by this package (excludes exonware-xwsystem==0.9.0.37; see lazy/full).
     xw = [
-      "exonware-xwdata==0.9.0.17",
+      "exonware-xwdata==0.9.0.18",
       "exonware-xwjson==0.9.0.24",
       "exonware-xwquery==0.9.0.16",
-      "exonware-xwschema==0.4.0.18",
+      "exonware-xwschema==0.4.0.19",
     ]
     lazy = [
-      "exonware-xwaction[xw]==0.9.0.15",
+      "exonware-xwaction[xw]==0.9.0.16",
       "exonware-xwlazy==1.0.1.82",
       "exonware-xwsystem[lazy]==0.9.0.43",
-      "exonware-xwdata[xw]==0.9.0.17",
+      "exonware-xwdata[xw]==0.9.0.18",
       "exonware-xwjson[xw]==0.9.0.24",
       "exonware-xwquery[xw]==0.9.0.16",
-      "exonware-xwschema[xw]==0.4.0.18",
+      "exonware-xwschema[xw]==0.4.0.19",
     ]
     full = [
-      "exonware-xwaction[xw]==0.9.0.15",
+      "exonware-xwaction[xw]==0.9.0.16",
       "exonware-xwsystem[full]==0.9.0.43",
-      "exonware-xwdata[xw]==0.9.0.17",
+      "exonware-xwdata[xw]==0.9.0.18",
       "exonware-xwjson[xw]==0.9.0.24",
       "exonware-xwquery[xw]==0.9.0.16",
-      "exonware-xwschema[xw]==0.4.0.18",
+      "exonware-xwschema[xw]==0.4.0.19",
       "fastapi",
       "prefect",
       "unidecode",
     ]
     dev = [
-      "exonware-xwaction[full]==0.9.0.15",
+      "exonware-xwaction[full]==0.9.0.16",
       "black>=23.0.0",
       "isort>=5.12.0",
       "mypy>=1.0.0",
